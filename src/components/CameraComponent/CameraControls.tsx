@@ -17,12 +17,8 @@ const CameraControls: React.FC<CameraControlsProps> = ({
 }) => {
   if (requestPermission) {
     return (
-      <View className="flex-1 justify-center items-center">
-        <Text className="text-center pb-4">Aplikasi membutuhkan izin kamera perangkat</Text>
-        <TouchableOpacity onPress={requestPermission} className="bg-blue-500 p-2 rounded">
-          <Text className="text-white">Izin Akses Kamera</Text>
-        </TouchableOpacity>
-      </View>
+      requestPermission()
+      
     );
   }
 

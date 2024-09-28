@@ -9,9 +9,8 @@ type ImageAttendanceProps = {
 
 const ImageAttendance: React.FC<ImageAttendanceProps> = ({ checkInTime, checkOutTime }) => {
   return (
-    <View className="w-full flex flex-row justify-center items-center p-4 gap-8">
-      {/* Elemen untuk Check In */}
-      <View className='flex justify-center items-center'>
+    <View className="w-full flex flex-row justify-center items-center p-4">
+      <View className='flex justify-center items-center mr-8'>
         <View style={styles.imageBox} className="justify-center items-center">
           <Ionicons name='image-outline' size={24} color={'#5cb874'} />
         </View>
@@ -21,7 +20,6 @@ const ImageAttendance: React.FC<ImageAttendanceProps> = ({ checkInTime, checkOut
       </View>
 
 
-      {/* Elemen untuk Check Out */}
       <View className='flex justify-center items-center'>
         <View style={styles.imageBox} className="justify-center items-center">
           <Ionicons name='image-outline' size={24} color={'#5cb874'} />
@@ -41,7 +39,7 @@ const styles = {
     borderRadius: 10,
     borderWidth: 1,
     borderColor: '#5cb874',
-    borderStyle: 'dashed', // Not supported by Tailwind, so using inline style here
+    borderStyle: 'dashed', 
   },
 };
 

@@ -33,7 +33,7 @@ const AttendancePage = () => {
   };
 
   return (
-    <View className="w-full h-full flex bg-background p-4">
+    <View className="w-full h-full flex bg-background p-4 justify-center ">
       <Text className="font-bold text-xl text-accentYellow text-left my-4">
         Hai John Doe, Selamat Datang!
       </Text>
