@@ -1,16 +1,21 @@
-import * as React from 'react';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { StatusBar } from 'expo-status-bar'; 
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { CoordinatorMain, LoginPage, OnsiteDetailPage, OnsiteMain, Splash } from './src/pages';
+import * as React from "react";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { StatusBar } from "expo-status-bar";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import {
+  CoordinatorMain,
+  LoginPage,
+  OnsiteDetailPage,
+  OnsiteMain,
+  Splash,
+} from "./src/pages";
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
     <SafeAreaProvider>
-      {/* StatusBar global dengan gaya light-content */}
       <StatusBar style="light" backgroundColor="#0f172a" />
 
       <NavigationContainer>

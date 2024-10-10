@@ -1,6 +1,6 @@
-import React from 'react';
-import { View, Image, TouchableOpacity, Text, StyleSheet, ViewView, ImageBackground } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import React from "react";
+import { View, TouchableOpacity, ImageBackground } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
 type CameraPreviewProps = {
   photo: string;
@@ -9,34 +9,44 @@ type CameraPreviewProps = {
   onCancel: () => void;
 };
 
-const CameraPreview: React.FC<CameraPreviewProps> = ({ photo, onRetake, onSave, onCancel }) => {
+const CameraPreview: React.FC<CameraPreviewProps> = ({
+  photo,
+  onRetake,
+  onSave,
+  onCancel,
+}) => {
   return (
-    <View className="flex-1 justify-center items-center ">
-      <ImageBackground source={{ uri: photo }} style={styles.imagePreview}>
+    <View className="flex-1 justify-center items-center">
+      {/* Set ImageBackground to fixed 300x300 size */}
+      <ImageBackground
+        source={{ uri: photo }}
+        className="w-72 h-72 justify-end"
+      >
+        {/* Kontrol untuk Retake, Save, dan Cancel */}
+      </ImageBackground>
 
-      <View className="flex-row justify-center  gap-8 w-full p-10">
-        <TouchableOpacity onPress={onRetake} className="bg-yellow-500 p-3 px-5 rounded">
-          <Text className="text-white">Retake</Text>
+      <View className="flex-row justify-center mt-5 space-x-4">
+        <TouchableOpacity
+          onPress={onRetake}
+          className="bg-blue-500 p-3 rounded-lg"
+        >
+          <Ionicons name="reload-circle" size={24} />
         </TouchableOpacity>
-        <TouchableOpacity onPress={onSave} className="bg-green-500 p-3 px-5 rounded">
-          <Text className="text-white">Save</Text>
+        <TouchableOpacity
+          onPress={onSave}
+          className="bg-green-500 p-3 rounded-lg"
+        >
+          <Ionicons name="save" size={24} />
         </TouchableOpacity>
-        <TouchableOpacity onPress={onCancel} className="bg-red-500 p-3 px-5 rounded">
-          <Text className="text-white">Cancel</Text>
+        <TouchableOpacity
+          onPress={onCancel}
+          className="bg-red-500 p-3 rounded-lg"
+        >
+          <Ionicons name="close-circle" size={24} />
         </TouchableOpacity>
       </View>
-      </ImageBackground>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  imagePreview: {
-    justifyContent:'flex-end',
-    width: '100%',
-    height: '100%',
-    aspectRatio: 1, // Ensure image stays in 1:1 ratio
-  },
-});
 
 export default CameraPreview;
