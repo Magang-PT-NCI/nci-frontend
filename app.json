@@ -1,11 +1,22 @@
 {
   "expo": {
+    "permissions": ["CAMERA"],
+    "plugins": [
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera",
+          "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone",
+          "recordAudioAndroid": true
+        }
+      ]
+    ],
     "name": "Absensi OnSite",
     "slug": "Absensi OnSite",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/logo.png",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "automatic",
     "jsEngine": "hermes",
     "ios": {
       "supportsTablet": true
