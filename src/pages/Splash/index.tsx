@@ -21,13 +21,13 @@ const Splash: React.FC<SplashProps> = ({ navigation }) => {
         .setReqBody({ token: token })
         .post(
           (data) => {
+            const profile_photo = data.profile_photo;
+            const NIK = data.nik;
             if (data.user_role === "OnSite") {
-              const profile_photo = data.profile_photo;
-              const NIK = data.nik;
 
               navigation.replace("OnsiteMain", { profile_photo, NIK });
             } else {
-              navigation.replace("CoordinatorMain");
+              navigation.replace("CoordinatorMain", { profile_photo, NIK });
             }
           },
           (error) => navigation.replace("LoginPage")

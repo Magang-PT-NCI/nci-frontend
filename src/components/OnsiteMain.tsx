@@ -36,7 +36,6 @@ const OnsiteMain: React.FC<OnsiteMainProps> = ({ route }) => {
 
   interface renderSceneProps {
     route: { key: string; title: string };
-    jumpTo: (key: string) => void;
   }
 
   const renderScene = ({ route }: renderSceneProps) => {

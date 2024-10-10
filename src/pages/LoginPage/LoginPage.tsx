@@ -37,13 +37,13 @@ const LoginPage = () => {
     const loginSuccess = (data: LoginResdata) => {
       setCookie("token", data.token);
 
+      const profile_photo = data.profile_photo;
+      const NIK = data.nik;
       if (data.user_role === "OnSite") {
-        const profile_photo = data.profile_photo;
-        const NIK = data.nik;
 
         navigation.replace("OnsiteMain", { profile_photo, NIK });
       } else {
-        navigation.replace("CoordinatorMain");
+        navigation.replace("CoordinatorMain", { profile_photo, NIK });
       }
     };
 
