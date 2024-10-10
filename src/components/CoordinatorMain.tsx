@@ -1,17 +1,14 @@
 import { View, useWindowDimensions } from "react-native";
 import React from "react";
-import { TabView, SceneMap, TabBar } from "react-native-tab-view";
+import { TabView, TabBar } from "react-native-tab-view";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import HeaderBar from "./HeaderBar";
 import DashboardPage from "../pages/CoordPage/DashboardPage";
 import ReportPage from "../pages/CoordPage/ReportPage";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { StackParamList } from "../utils/StackParamList";
 
-const renderScene = SceneMap({
-  dashboard: DashboardPage,
-  report: ReportPage,
-});
-
-const renderTabBar = (props) => (
+const renderTabBar = (props: any) => (
   <TabBar
     {...props}
     indicatorStyle={{ backgroundColor: "#ffcc00" }}
@@ -21,9 +18,31 @@ const renderTabBar = (props) => (
   />
 );
 
-const CoordinatorMain = () => {
+type CoordinatorMainProps = NativeStackScreenProps<
+  StackParamList,
+  "CoordinatorMain"
+>;
+
+const CoordinatorMain: React.FC<CoordinatorMainProps> = ({ route }) => {
+  const { profile_photo } = route.params;
+  const { NIK } = route.params;
   const insets = useSafeAreaInsets();
   const layout = useWindowDimensions();
+
+  interface renderSceneProps {
+    route: { key: string; title: string };
+  }
+
+  const renderScene = ({ route }: renderSceneProps) => {
+    switch (route.key) {
+      case "dashboard":
+        return <DashboardPage />;
+      case "report":
+        return <ReportPage />;
+      default:
+        return null;
+    }
+  };
 
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
@@ -40,7 +59,8 @@ const CoordinatorMain = () => {
         backgroundColor: "#0f172a",
       }}
     >
-      <HeaderBar />
+      <HeaderBar image_profile={profile_photo} />
+
       <TabView
         navigationState={{ index, routes }}
         renderScene={renderScene}

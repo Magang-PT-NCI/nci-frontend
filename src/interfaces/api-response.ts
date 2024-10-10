@@ -52,7 +52,7 @@ export interface AttendanceResData {
   working_hours: string;
   checkIn: AttendanceCheckRes | null;
   checkOut: AttendanceCheckRes | null;
-  permit: Permit | null;
+  permit: PermitResData | null;
   activities: Activity[];
 }
 
