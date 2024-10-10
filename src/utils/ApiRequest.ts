@@ -34,6 +34,9 @@ export default class ApiRequest<Treq, Tres> {
       case Endpoint.Permit:
         this.url = `${ATTENDANCE_URL}/permit`;
         break;
+      case Endpoint.Monitoring:
+        this.url = `${ATTENDANCE_URL}/monitoring`;
+        break;
 
       default:
         break;
