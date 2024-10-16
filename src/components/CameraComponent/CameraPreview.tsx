@@ -20,7 +20,7 @@ const CameraPreview: React.FC<CameraPreviewProps> = ({
       {/* Set ImageBackground to fixed 300x300 size */}
       <ImageBackground
         source={{ uri: photo }}
-        className="w-72 h-72 justify-end"
+        className="w-96 h-96 justify-end"
       >
         {/* Kontrol untuk Retake, Save, dan Cancel */}
       </ImageBackground>
