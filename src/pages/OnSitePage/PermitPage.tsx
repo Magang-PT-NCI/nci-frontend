@@ -10,9 +10,10 @@ import FileInput from "../../components/FileInput";
 import { DocumentResult } from "expo-document-picker";
 import { getCookie } from "../../utils/getCookie";
 import { useNavigation } from "@react-navigation/native";
-import { PermitResData } from "../../interfaces/api-response";
+
 import { Endpoint } from "../../enums/api-enum";
 import ApiRequest from "../../utils/ApiRequest";
+import {PermitResData} from "../../interfaces/permit.dto";
 
 type PermitPageProps = {
   NIK: string;

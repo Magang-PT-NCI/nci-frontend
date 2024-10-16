@@ -12,10 +12,9 @@ import { Ionicons } from "@expo/vector-icons";
 import DateTimePicker from "react-native-modal-datetime-picker";
 import DropdownCustom from "../DropdownCustom";
 import ApiRequest from "../../utils/ApiRequest";
-import { LogbookReqBody } from "../../interfaces/api-request";
-import { LogbookResData } from "../../interfaces/api-response";
 import { Endpoint } from "../../enums/api-enum";
 import { getCookie } from "../../utils/getCookie";
+import {LogbookReqBody, LogbookResData} from "../../interfaces/logbook.dto";
 
 interface LogbookButtonCreateProps {
   attendanceID: number;

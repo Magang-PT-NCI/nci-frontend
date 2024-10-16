@@ -1,6 +1,7 @@
 import { Dayjs } from "dayjs";
 import { Camera } from "expo-camera";
 import { Alert, Linking } from "react-native";
+import * as Location from "expo-location";
 
 export const isEmpty = (obj: object) => {
   return Object.keys(obj).length === 0;
@@ -35,6 +36,33 @@ export const requestCameraPermission = async () => {
       ]
     );
     return false;
+  } else {
+      return true;
   }
-  return true;
+};
+
+export const getLocation = async () => {
+  const { status: gpsPermission } =
+      await Location.requestForegroundPermissionsAsync();
+  if (gpsPermission !== "granted") {
+    Alert.alert(
+        "Peringatan",
+        "Tidak dapat melanjutkan tanpa akses lokasi. Pastikan untuk mengubah perizinan pada pengaturan perangkat.",
+        [
+          {
+            text: "Mengerti",
+            onPress: () => {
+              Linking.openSettings();
+            },
+          },
+        ]
+    );
+    return;
+  } else {
+    const location = await Location.getCurrentPositionAsync({});
+    const latitude = location.coords.latitude;
+    const longitude = location.coords.longitude;
+    return {latitude, longitude};
+  }
+
 };

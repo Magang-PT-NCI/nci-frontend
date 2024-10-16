@@ -3,7 +3,7 @@ import React from "react";
 
 interface TodaySUmmaryProps {
   title: string;
-  value: string;
+  value: number;
 }
 
 const TodaySummary: React.FC<TodaySUmmaryProps> = ({ title, value }) => {

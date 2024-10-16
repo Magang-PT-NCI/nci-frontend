@@ -9,12 +9,11 @@ import LoginImage from "../../../assets/image/dev_app_illustration";
 import { SafeAreaView } from "react-native-safe-area-context";
 import FormLogin from "./FormLogin";
 import { useNavigation } from "@react-navigation/native";
-import { LoginReqBody } from "../../interfaces/api-request";
 import ApiRequest from "../../utils/ApiRequest";
 import { Endpoint } from "../../enums/api-enum";
-import { LoginResdata } from "../../interfaces/api-response";
 import { setCookie } from "../../utils/setCookie";
 import { ApiError } from "../../interfaces/api-error";
+import {LoginReqBody, LoginResdata} from "../../interfaces/auth.dto";
 
 const LoginPage = () => {
   const navigation = useNavigation();

@@ -1,12 +1,11 @@
 import { View, Text, Image } from "react-native";
 import React, { useEffect } from "react";
-import { ValidateTokenReqBody } from "../../interfaces/api-request";
-import { ValidateTokenResData } from "../../interfaces/api-response";
 import { Endpoint } from "../../enums/api-enum";
 import ApiRequest from "../../utils/ApiRequest";
 import { getCookie } from "../../utils/getCookie";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { StackParamList } from "../../utils/StackParamList";
+import {ValidateTokenReqBody, ValidateTokenResData} from "../../interfaces/auth.dto";
 
 type SplashProps = NativeStackScreenProps<StackParamList, "Splash">;
 
@@ -15,23 +14,23 @@ const Splash: React.FC<SplashProps> = ({ navigation }) => {
     const token = await getCookie("token");
 
     if (token) {
-      new ApiRequest<ValidateTokenReqBody, ValidateTokenResData>(
-        Endpoint.ValidateToken
+      await new ApiRequest<ValidateTokenReqBody, ValidateTokenResData>(
+          Endpoint.ValidateToken
       )
-        .setReqBody({ token: token })
-        .post(
-          (data) => {
-            const profile_photo = data.profile_photo;
-            const NIK = data.nik;
-            if (data.user_role === "OnSite") {
+          .setReqBody({token: token})
+          .post(
+              (data) => {
+                  const profile_photo = data.profile_photo;
+                  const NIK = data.nik;
+                  if (data.user_role === "OnSite") {
 
-              navigation.replace("OnsiteMain", { profile_photo, NIK });
-            } else {
-              navigation.replace("CoordinatorMain", { profile_photo, NIK });
-            }
-          },
-          (error) => navigation.replace("LoginPage")
-        );
+                      navigation.replace("OnsiteMain", {profile_photo, NIK});
+                  } else {
+                      navigation.replace("CoordinatorMain", {profile_photo, NIK});
+                  }
+              },
+              (error) => navigation.replace("LoginPage")
+          );
     } else {
       navigation.replace("LoginPage");
     }

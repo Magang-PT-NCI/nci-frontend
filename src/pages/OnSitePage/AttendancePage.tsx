@@ -10,19 +10,19 @@ import ApiRequest from "../../utils/ApiRequest";
 import { getCookie } from "../../utils/getCookie";
 import { HeadersReq } from "../../interfaces/api-request";
 import {
-  AttendanceCheckRes,
-  AttendanceResData,
   EmployeeResData,
-} from "../../interfaces/api-response";
+} from "../../interfaces/employee.dto";
 import { Endpoint } from "../../enums/api-enum";
-import * as Location from "expo-location";
 import {
+  getLocation,
   isEmpty,
   requestCameraPermission,
   workingHours,
 } from "../../utils/commonUtils";
 import dayjs from "dayjs";
 import { useNavigation } from "@react-navigation/native";
+import {AttendanceCheckRes, AttendancePostRes, AttendanceResData} from "../../interfaces/attendance.dto";
+import AttendanceMap from "../../components/AttendanceMap";
 
 type AttendancePageProps = {
   NIK: string;
@@ -40,6 +40,8 @@ const AttendancePage: React.FC<AttendancePageProps> = ({
   const [capturedPhoto, setCapturedPhoto] = useState<string | null>(null);
   const [employee, setEmployee] = useState({} as EmployeeResData);
   const [isButtonCheckDisable, setIsButtonCheckDisable] = useState(true);
+  const [checkResData, setCheckResData] = useState<{
+    checkIn: AttendanceCheckRes | null, checkOut: AttendanceCheckRes | null}>({checkIn: null, checkOut: null});
 
   const currentTime = dayjs();
   const startWorkTime = dayjs().hour(6).minute(0).second(0).millisecond(0);
@@ -67,42 +69,86 @@ const AttendancePage: React.FC<AttendancePageProps> = ({
     // Hanya melanjutkan jika izin kamera diberikan
     if (!hasPermission) {
       return;
+    } else {
+      setCameraVisible(true);
     }
 
-    setCameraVisible(true);
   };
 
+  const navigation = useNavigation();
   const handlePhotoCapture = async (photo: string) => {
-    const navigation = useNavigation();
-    setCapturedPhoto(photo);
-    setCameraVisible(false);
-    setIsCheckedIn(true);
 
-    const token = await getCookie("token");
-    const location = await getLocation();
-    const formData = new FormData();
+  setCapturedPhoto(photo);
+  setCameraVisible(false);
+  setIsCheckedIn(true);
 
-    if (token && location) {
-      formData.append("nik", NIK);
-      formData.append(
-        "type",
-        isEmpty(attendanceData) ? "check_in" : "check_out"
-      );
-      formData.append("location", location[0] + "," + location[1]);
-      formData.append("photo", {
-        uri: photo,
-        name: "photo.jpg",
-        type: "image/jpeg",
-      });
+  const token = await getCookie("token");
+  const location = await getLocation();
+  const formData = new FormData();
 
-      await new ApiRequest<FormData, AttendanceCheckRes>(Endpoint.Attendance)
+  if (token && location) {
+    formData.append("nik", NIK);
+    formData.append(
+      "type",
+      isEmpty(attendanceData) ? "check_in" : "check_out"
+    );
+    formData.append("location", JSON.stringify(location));
+    formData.append("photo", {
+      uri: photo,
+      name: "photo.jpg",
+      type: "image/jpeg",
+    });
+
+      const response = await new ApiRequest<FormData, AttendancePostRes>(Endpoint.Attendance)
         .setToken(token)
         .setContentType("multipart/form-data")
         .setReqBody(formData)
         .post(
           (data) => console.log(data),
-          (error) => console.log(JSON.stringify(error, null, 2))
+          (error) => {
+            console.log(JSON.stringify(error, null, 2))
+
+            Alert.alert(
+                "Peringatan",
+                error.message,
+                [
+                  {
+                    text: "Mengerti",
+                    onPress: () => {
+
+                    },
+                  },
+                ]
+            );
+          }
         );
+
+      const postResData = response.getData();
+
+
+        setCheckResData((prevData)=> {
+          if(postResData.type === "check_in") {
+            return {
+              checkOut: prevData.checkOut,
+              checkIn: {
+                time: postResData.time,
+                photo: postResData.photo,
+                location: postResData.location,
+              }
+            }
+          }
+          else {
+            return {
+              checkIn:prevData.checkIn,
+              checkOut: {
+                time: postResData.time,
+                photo: postResData.photo,
+                location: postResData.location,
+              }
+            }
+          }
+        })
+
     } else {
       navigation.replace("LoginPage");
     }
@@ -112,32 +158,11 @@ const AttendancePage: React.FC<AttendancePageProps> = ({
     setCameraVisible(false);
   };
 
-  const getLocation = async () => {
-    const { status: gpsPermission } =
-      await Location.requestForegroundPermissionsAsync();
-    if (gpsPermission !== "granted") {
-      Alert.alert(
-        "Peringatan",
-        "Tidak dapat melanjutkan tanpa akses lokasi. Pastikan untuk mengubah perizinan pada pengaturan perangkat.",
-        [
-          {
-            text: "Mengerti",
-            onPress: () => {
-              Linking.openSettings();
-            },
-          },
-        ]
-      );
-      return;
-    }
 
-    const location = await Location.getCurrentPositionAsync({});
-    const lat = location.coords.latitude.toString();
-    const long = location.coords.longitude.toString();
-    return [lat, long];
-  };
 
   useEffect(() => {
+    getLocation();
+    requestCameraPermission();
     if (NIK) {
       getEmployeeData();
     }
@@ -152,6 +177,11 @@ const AttendancePage: React.FC<AttendancePageProps> = ({
       setIsCheckedIn(!attendanceData.checkIn);
       setIsButtonCheckDisable(!!attendanceData.checkOut);
     }
+
+    setCheckResData({checkIn:attendanceData.checkIn, checkOut: attendanceData.checkOut});
+
+    setIsCheckedIn(!(isEmpty(attendanceData) || !(attendanceData?.checkIn)));
+
   }, [attendanceData]);
 
   if (isEmpty(attendanceData) && status !== 204) {
@@ -162,11 +192,14 @@ const AttendancePage: React.FC<AttendancePageProps> = ({
     );
   }
 
+  console.log(JSON.stringify(attendanceData,null, 2));
+  console.log()
+
   return (
     <ScrollView style={{ showsVerticalScrollIndicator: false }}>
       <View className="w-full h-full flex bg-background px-4">
         <Text className="font-bold text-xl text-accentYellow text-left my-4">
-          Hai {employee.name}, Selamat Datang234!
+          Hai {employee.name}, Selamat Datang!
         </Text>
         <EmployeeInfo
           NIK={employee.nik}
@@ -179,12 +212,12 @@ const AttendancePage: React.FC<AttendancePageProps> = ({
           title={isCheckedIn ? "Check Out" : "Check In"}
           callbackEvt={handlerAttendance}
           mt={20}
-          disabled={isButtonCheckDisable}
+
         />
 
         <AttendanceHistory
-          checkInTime={attendanceData.checkIn?.time}
-          checkOutTime={attendanceData.checkOut?.time}
+          checkInTime={checkResData.checkIn?.time}
+          checkOutTime={checkResData.checkOut?.time}
         />
 
         {cameraVisible && (
@@ -195,10 +228,25 @@ const AttendancePage: React.FC<AttendancePageProps> = ({
         )}
 
         <ImageAttendance
-          checkInImage={attendanceData.checkIn?.photo}
-          checkOutImage={attendanceData.checkOut?.photo}
+          checkInImage={checkResData.checkIn?.photo}
+          checkOutImage={checkResData.checkOut?.photo}
         />
+
+        {/*check in location*/}
+        {/*<AttendanceMap*/}
+        {/*    status={"Check In"}*/}
+        {/*    latitude={checkResData.checkIn?.location?.latitude}*/}
+        {/*    longitude={checkResData.checkIn?.location?.longitude}/>*/}
+
+        {/*/!*check out location*!/*/}
+        {/*<AttendanceMap*/}
+        {/*    status={"Check Out"}*/}
+        {/*    latitude={checkResData.checkOut?.location?.latitude}*/}
+        {/*    longitude={checkResData.checkOut?.location?.longitude}/>*/}
       </View>
+
+
+
     </ScrollView>
   );
 };
