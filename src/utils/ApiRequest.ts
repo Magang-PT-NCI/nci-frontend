@@ -34,6 +34,9 @@ export default class ApiRequest<Treq, Tres> {
       case Endpoint.Permit:
         this.url = `${ATTENDANCE_URL}/permit`;
         break;
+      case Endpoint.Monitoring:
+        this.url = `${ATTENDANCE_URL}/monitoring`;
+        break;
 
       default:
         break;
@@ -89,7 +92,8 @@ export default class ApiRequest<Treq, Tres> {
 
       if (success) success(response.data);
     } catch (e: any) {
-      console.log(e);
+      console.log(e.stack);
+      console.log(JSON.stringify(e, null, 2));
       console.log(EMPLOYEE_URL);
       this.status = e.response.status;
       this.data = e.response.data;
@@ -115,6 +119,7 @@ export default class ApiRequest<Treq, Tres> {
       this.status = response.status;
       this.data = response.data;
     } catch (error: any) {
+      console.log(JSON.stringify(error, null, 2));
       this.status = error.response.status;
       this.data = error.response.data;
     }

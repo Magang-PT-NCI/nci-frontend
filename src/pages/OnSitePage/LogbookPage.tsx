@@ -3,7 +3,8 @@ import React, { useEffect, useState } from "react";
 import LogbookCard from "../../components/LogbookCard";
 import LogbookButtonFilter from "../../components/LogbookButtons/LogbookButtonFilter";
 import LogbookButtonCreate from "../../components/LogbookButtons/LogbookButtonCreate";
-import { LogbookResData } from "../../interfaces/api-response";
+import {Logbook, LogbookResData} from "../../interfaces/logbook.dto";
+
 
 interface LogbookPageProps {
   logbookData: Logbook[];

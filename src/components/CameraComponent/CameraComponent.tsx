@@ -113,8 +113,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   cameraContainer: {
-    width: 300,
-    height: 300, // Set the camera container to 300x300px
+    width: 384,
+    height: 384, // Set the camera container to 300x300px
     justifyContent: "center",
     alignItems: "center",
   },

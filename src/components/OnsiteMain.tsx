@@ -9,11 +9,12 @@ import HeaderBar from "./HeaderBar";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { StackParamList } from "../utils/StackParamList";
 import ApiRequest from "../utils/ApiRequest";
-import { AttendanceResData } from "../interfaces/api-response";
+
 import { Endpoint } from "../enums/api-enum";
 import { getCookie } from "../utils/getCookie";
 import { ParamsReq } from "../interfaces/api-request";
 import { isEmpty } from "../utils/commonUtils";
+import {AttendanceResData} from "../interfaces/attendance.dto";
 
 const renderTabBar = (props: any) => (
   <TabBar
@@ -106,7 +107,7 @@ const OnsiteMain: React.FC<OnsiteMainProps> = ({ route }) => {
         ]
       );
     }
-    // Cek apakah user berpindah ke tab 'Logbook'
+    // Cek apakah user berpindah ke tab 'LogbookDto'
     if (routes[newIndex].key === "logbook" && isEmpty(attendanceData)) {
       Alert.alert(
         "Peringatan",

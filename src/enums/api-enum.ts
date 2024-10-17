@@ -4,6 +4,6 @@ export enum Endpoint {
   GetEmployee,
   Attendance,
   Logbook,
-  GetReport,
+  Monitoring,
   Permit,
 }
