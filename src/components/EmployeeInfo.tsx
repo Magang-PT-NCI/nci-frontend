@@ -1,5 +1,5 @@
-import { View, Text } from "react-native";
-import React, {useState} from "react";
+import { View, Text } from 'react-native';
+import React from 'react';
 
 interface EmployeeInfoProps {
   NIK: string;
@@ -18,20 +18,19 @@ const EmployeeInfo: React.FC<EmployeeInfoProps> = ({
   date,
   status,
 }) => {
-
   const getStatusColor = () => {
     switch (status) {
-      case "presence":
-        status = "Hadir";
-        return "text-accentGreen";
-      case "permit":
-        status = "Izin";
-        return "text-accentYellow";
-      case "absent":
-        status = "Absen";
-        return "text-red-400";
+      case 'presence':
+        status = 'Hadir';
+        return 'text-accentGreen';
+      case 'permit':
+        status = 'Izin';
+        return 'text-accentYellow';
+      case 'absent':
+        status = 'Absen';
+        return 'text-red-400';
       default:
-        return "text-textDefault";
+        return 'text-textDefault';
     }
   };
 
@@ -69,7 +68,7 @@ const EmployeeInfo: React.FC<EmployeeInfoProps> = ({
             <Text className="text-accentGreen">{date}</Text>
           </View>
         ) : (
-          ""
+          ''
         )}
       </View>
     </View>

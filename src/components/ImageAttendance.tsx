@@ -1,6 +1,6 @@
-import { View, Text, Image } from "react-native";
-import React from "react";
-import { Ionicons } from "@expo/vector-icons";
+import { View, Text, Image } from 'react-native';
+import React from 'react';
+import { Ionicons } from '@expo/vector-icons';
 
 type ImageAttendanceProps = {
   checkInTime?: string;
@@ -24,14 +24,15 @@ const ImageAttendance: React.FC<ImageAttendanceProps> = ({
             className="w-40 h-40 object-cover rounded-lg"
           />
         ) : (
+          // @ts-ignore
           <View style={styles.imageBox} className="justify-center items-center">
-            <Ionicons name="image-outline" size={24} color={"#5cb874"} />
+            <Ionicons name="image-outline" size={24} color={'#5cb874'} />
           </View>
         )}
 
         <View className="mt-4 items-center">
           <Text className="text-sm text-textDefault">
-            {checkInTime ? `Check In: ${checkInTime}` : " "}
+            {checkInTime ? `Check In: ${checkInTime}` : ' '}
           </Text>
         </View>
       </View>
@@ -43,14 +44,15 @@ const ImageAttendance: React.FC<ImageAttendanceProps> = ({
             className="w-40 h-40 object-cover rounded-lg"
           />
         ) : (
+          // @ts-ignore
           <View style={styles.imageBox} className="justify-center items-center">
-            <Ionicons name="image-outline" size={24} color={"#5cb874"} />
+            <Ionicons name="image-outline" size={24} color={'#5cb874'} />
           </View>
         )}
 
         <View className="mt-4 items-center">
           <Text className="text-sm text-textDefault">
-            {checkOutTime ? `Check Out: ${checkOutTime}` : " "}
+            {checkOutTime ? `Check Out: ${checkOutTime}` : ' '}
           </Text>
         </View>
       </View>
@@ -64,8 +66,8 @@ const styles = {
     height: 160,
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: "#5cb874",
-    borderStyle: "dashed",
+    borderColor: '#5cb874',
+    borderStyle: 'dashed',
   },
 };
 

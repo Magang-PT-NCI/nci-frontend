@@ -1,32 +1,30 @@
-import { View, Text } from "react-native";
-import React, { useEffect, useState } from "react";
-import DashboardChart from "../../components/DashboardChart";
-import TodaySummarySection from "../../components/TodaySummarySection";
-import { getCookie } from "../../utils/getCookie";
-import ApiRequest from "../../utils/ApiRequest";
-import { ParamsReq } from "../../interfaces/api-request";
-import { Endpoint } from "../../enums/api-enum";
-import {DashboardResData} from "../../interfaces/dashboard.dto";
+import { View, Text } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import DashboardChart from '../../components/DashboardChart';
+import TodaySummarySection from '../../components/TodaySummarySection';
+import { getCookie } from '../../utils/getCookie';
+import ApiRequest from '../../utils/ApiRequest';
+import { ParamsReq } from '../../interfaces/api-request';
+import { Endpoint } from '../../enums/endpoint-class';
+import { DashboardResData } from '../../interfaces/dashboard.dto';
 
 const DashboardPage = () => {
   const [monitoringDashboardData, setMonitoringDashboardData] = useState(
-    {} as DashboardResData
+    {} as DashboardResData,
   );
 
   const getMonitoringDashboard = async () => {
-    const token = (await getCookie("token")) || "";
+    const token = (await getCookie('token')) || '';
     const response = await new ApiRequest<ParamsReq, DashboardResData>(
-      Endpoint.Monitoring
+      Endpoint.Monitoring,
     )
       .setToken(token)
-      .setPathParam("dashboard")
-      .setParams({ filter: "all" })
+      .setPathParam('dashboard')
+      .setParams({ filter: 'all' })
       .get();
 
     setMonitoringDashboardData(response.getData());
-
   };
-
 
   useEffect(() => {
     getMonitoringDashboard();
@@ -41,13 +39,17 @@ const DashboardPage = () => {
         </Text>
       </View>
 
-      <TodaySummarySection presence={monitoringDashboardData.total_presence} permit={monitoringDashboardData.total_permit} absent={monitoringDashboardData.total_absent}/>
+      <TodaySummarySection
+        presence={monitoringDashboardData.total_presence}
+        permit={monitoringDashboardData.total_permit}
+        absent={monitoringDashboardData.total_absent}
+      />
 
       <Text className="font-bold text-lg text-accentYellow w-full mb-4">
         Kehadiran OnSite Minggu Ini
       </Text>
 
-      <DashboardChart chartData={monitoringDashboardData.weekly_summary}/>
+      <DashboardChart chartData={monitoringDashboardData.weekly_summary} />
     </View>
   );
 };

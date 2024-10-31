@@ -1,21 +1,23 @@
-import { View, Text, Image, Modal, TouchableOpacity } from "react-native";
-import React, { useState } from "react";
-import NotifBellIcon from "../../assets/icons/notificationsIcon";
-import ButtonCustom from "./ButtonCustom";
-import { removeCookie } from "../utils/removeCookie";
-import { useNavigation } from "@react-navigation/native";
+import { View, Text, Image, Modal, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+// @ts-ignore
+import NotifBellIcon from '../../assets/icons/notificationsIcon';
+import ButtonCustom from './ButtonCustom';
+import { removeCookie } from '../utils/removeCookie';
+import { useNavigation, StackActions } from '@react-navigation/native';
 
 interface HeaderBarProps {
   image_profile: string;
+  role: string;
 }
 
-const HeaderBar: React.FC<HeaderBarProps> = ({ image_profile }) => {
+const HeaderBar: React.FC<HeaderBarProps> = ({ image_profile, role }) => {
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState<boolean>(false);
 
   const handleLogout = async () => {
-    await removeCookie("token");
-    navigation.replace("LoginPage");
+    await removeCookie('token');
+    navigation.dispatch(StackActions.replace('LoginPage'));
   };
 
   return (
@@ -23,7 +25,7 @@ const HeaderBar: React.FC<HeaderBarProps> = ({ image_profile }) => {
       <View className="flex flex-row justify-center items-center gap-2">
         <Image
           source={{
-            uri: "https://media.licdn.com/dms/image/v2/C560BAQFILYYv97IvhQ/company-logo_200_200/company-logo_200_200/0/1630645192893?e=2147483647&v=beta&t=LLeV0gvzIJcOq1ap_efrUFmmr_3l72HKDUrqR1E8SMg",
+            uri: 'https://media.licdn.com/dms/image/v2/C560BAQFILYYv97IvhQ/company-logo_200_200/company-logo_200_200/0/1630645192893?e=2147483647&v=beta&t=LLeV0gvzIJcOq1ap_efrUFmmr_3l72HKDUrqR1E8SMg',
           }}
           className="w-9 h-9 rounded"
         />
@@ -34,7 +36,16 @@ const HeaderBar: React.FC<HeaderBarProps> = ({ image_profile }) => {
       </View>
 
       <View className="flex flex-row justify-center items-center gap-4">
-        <NotifBellIcon height={34} width={34} />
+        <View className="mr-2">
+          <TouchableOpacity
+            //@ts-ignore
+            onPress={() => navigation.navigate('NotificationPage', { role })}
+            activeOpacity={0.5}
+          >
+            <NotifBellIcon height={34} width={34} />
+          </TouchableOpacity>
+        </View>
+
         <TouchableOpacity
           onPress={() => setModalVisible(true)}
           activeOpacity={0.7}
@@ -60,6 +71,7 @@ const HeaderBar: React.FC<HeaderBarProps> = ({ image_profile }) => {
           <View className="w-full h-10 items-end p-10">
             <View className="w-32 h-16">
               <ButtonCustom
+                icon="exit-outline"
                 title="Keluar"
                 callbackEvt={handleLogout}
                 color="#F05252"

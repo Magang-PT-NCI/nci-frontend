@@ -1,6 +1,7 @@
-import { View, Text } from "react-native";
-import React from "react";
-import FailIcon from "../../assets/icons/errorIcon";
+import { View, Text } from 'react-native';
+import React from 'react';
+// @ts-ignore
+import FailIcon from '../../assets/icons/errorIcon';
 
 interface AlertLoginProps {
   message?: string;

@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, TextInput, TouchableOpacity } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import ButtonCustom from "../../components/ButtonCustom";
-import AlertLogin from "../../components/AlertLogin";
+import React, { useEffect, useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import ButtonCustom from '../../components/ButtonCustom';
+import AlertLogin from '../../components/AlertLogin';
 
 interface FormLoginProps {
   onFormSubmit: (data: { nik: string; password: string }) => void;
@@ -14,8 +14,8 @@ const FormLogin: React.FC<FormLoginProps> = ({
   alertMessage,
 }) => {
   const [passwordVisible, setPasswordVisible] = useState(false);
-  const [nik, setNik] = useState("");
-  const [password, setPassword] = useState("");
+  const [nik, setNik] = useState('');
+  const [password, setPassword] = useState('');
 
   const handleLogin = () => {
     onFormSubmit({ nik, password });
@@ -38,7 +38,7 @@ const FormLogin: React.FC<FormLoginProps> = ({
       <TextInput
         className="p-4 rounded-2xl bg-customGray border border-accentGreen mb-4 text-textDefault"
         placeholder="NIK"
-        placeholderTextColor={"#94a3b8"}
+        placeholderTextColor={'#94a3b8'}
         style={{ fontSize: 14 }}
         value={nik}
         onChangeText={setNik}
@@ -49,7 +49,7 @@ const FormLogin: React.FC<FormLoginProps> = ({
         <TextInput
           className="flex-1 text-textDefault"
           placeholder="Password"
-          placeholderTextColor={"#94a3b8"}
+          placeholderTextColor={'#94a3b8'}
           secureTextEntry={!passwordVisible}
           style={{ fontSize: 14 }}
           value={password}
@@ -57,7 +57,7 @@ const FormLogin: React.FC<FormLoginProps> = ({
         />
         <TouchableOpacity onPress={() => setPasswordVisible(!passwordVisible)}>
           <Ionicons
-            name={passwordVisible ? "eye-off" : "eye"}
+            name={passwordVisible ? 'eye-off' : 'eye'}
             size={24}
             color="gray"
           />

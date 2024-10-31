@@ -6,14 +6,16 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import {
   CoordinatorMain,
   LoginPage,
+  NotificationPage,
   OnsiteDetailPage,
   OnsiteMain,
+  ReportPage,
   Splash,
 } from "./src/pages";
 
 const Stack = createNativeStackNavigator();
 
-export default function App() {
+ function App() {
   return (
     <SafeAreaProvider>
       <StatusBar style="light" backgroundColor="#0f172a" />
@@ -22,6 +24,8 @@ export default function App() {
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Splash" component={Splash} />
           <Stack.Screen name="LoginPage" component={LoginPage} />
+          <Stack.Screen name="ReportPage" component={ReportPage} />
+          <Stack.Screen name="NotificationPage" component={NotificationPage} />
           <Stack.Screen name="OnsiteMain" component={OnsiteMain} />
           <Stack.Screen name="CoordinatorMain" component={CoordinatorMain} />
           <Stack.Screen name="OnsiteDetailPage" component={OnsiteDetailPage} />
@@ -30,3 +34,5 @@ export default function App() {
     </SafeAreaProvider>
   );
 }
+
+export default App;

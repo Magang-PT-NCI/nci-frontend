@@ -1,38 +1,41 @@
-import { View, Text, Image } from "react-native";
-import React, { useEffect } from "react";
-import { Endpoint } from "../../enums/api-enum";
-import ApiRequest from "../../utils/ApiRequest";
-import { getCookie } from "../../utils/getCookie";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { StackParamList } from "../../utils/StackParamList";
-import {ValidateTokenReqBody, ValidateTokenResData} from "../../interfaces/auth.dto";
+import { View, Text, Image } from 'react-native';
+import React, { useEffect } from 'react';
+import { Endpoint } from '../../enums/endpoint-class';
+import ApiRequest from '../../utils/ApiRequest';
+import { getCookie } from '../../utils/getCookie';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { StackParamList } from '../../utils/StackParamList';
+import {
+  ValidateTokenReqBody,
+  ValidateTokenResData,
+} from '../../interfaces/auth.dto';
+import { StackActions } from '@react-navigation/native';
 
-type SplashProps = NativeStackScreenProps<StackParamList, "Splash">;
+type SplashProps = NativeStackScreenProps<StackParamList, 'Splash'>;
 
 const Splash: React.FC<SplashProps> = ({ navigation }) => {
   const validateToken = async () => {
-    const token = await getCookie("token");
+    const token = await getCookie('token');
 
     if (token) {
       await new ApiRequest<ValidateTokenReqBody, ValidateTokenResData>(
-          Endpoint.ValidateToken
+        Endpoint.ValidateToken,
       )
-          .setReqBody({token: token})
-          .post(
-              (data) => {
-                  const profile_photo = data.profile_photo;
-                  const NIK = data.nik;
-                  if (data.user_role === "OnSite") {
-
-                      navigation.replace("OnsiteMain", {profile_photo, NIK});
-                  } else {
-                      navigation.replace("CoordinatorMain", {profile_photo, NIK});
-                  }
-              },
-              (error) => navigation.replace("LoginPage")
-          );
+        .setReqBody({ token: token })
+        .post(
+          (data) => {
+            const profile_photo = data.profile_photo;
+            const NIK = data.nik;
+            if (data.user_role === 'OnSite') {
+              navigation.replace('OnsiteMain', { profile_photo, NIK });
+            } else {
+              navigation.replace('CoordinatorMain', { profile_photo, NIK });
+            }
+          },
+          (error) => navigation.dispatch(StackActions.replace('LoginPage')),
+        );
     } else {
-      navigation.replace("LoginPage");
+      navigation.dispatch(StackActions.replace('LoginPage'));
     }
   };
 
@@ -44,7 +47,7 @@ const Splash: React.FC<SplashProps> = ({ navigation }) => {
     <View className="w-full h-full bg-background flex justify-center items-center">
       <Image
         source={{
-          uri: "https://media.licdn.com/dms/image/v2/C560BAQFILYYv97IvhQ/company-logo_200_200/company-logo_200_200/0/1630645192893?e=2147483647&v=beta&t=LLeV0gvzIJcOq1ap_efrUFmmr_3l72HKDUrqR1E8SMg",
+          uri: 'https://media.licdn.com/dms/image/v2/C560BAQFILYYv97IvhQ/company-logo_200_200/company-logo_200_200/0/1630645192893?e=2147483647&v=beta&t=LLeV0gvzIJcOq1ap_efrUFmmr_3l72HKDUrqR1E8SMg',
         }}
         className="w-28 h-28 rounded-lg"
       />

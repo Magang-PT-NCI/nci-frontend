@@ -1,14 +1,18 @@
-import { View } from "react-native";
-import React from "react";
-import TodaySummary from "./TodaySummary";
+import { View } from 'react-native';
+import React from 'react';
+import TodaySummary from './TodaySummary';
 
 interface TodaySummarySectionProps {
-    presence: number;
-    permit: number;
-    absent: number;
+  presence: number;
+  permit: number;
+  absent: number;
 }
 
-const TodaySummarySection: React.FC<TodaySummarySectionProps> = ({presence, permit, absent}) => {
+const TodaySummarySection: React.FC<TodaySummarySectionProps> = ({
+  presence,
+  permit,
+  absent,
+}) => {
   return (
     <View className="flex flex-row mb-8 gap-4">
       <View>

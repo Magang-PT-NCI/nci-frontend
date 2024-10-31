@@ -1,6 +1,6 @@
-import { View } from "react-native";
-import React, { useState } from "react";
-import ButtonCustom from "../ButtonCustom";
+import { View } from 'react-native';
+import React, { useState } from 'react';
+import ButtonCustom from '../ButtonCustom';
 
 interface LogbookButtonFilterProps {
   onFilter: (filter: string) => void;
@@ -9,7 +9,7 @@ interface LogbookButtonFilterProps {
 const LogbookButtonFilter: React.FC<LogbookButtonFilterProps> = ({
   onFilter,
 }) => {
-  const [selectedFilter, setSelectedFilter] = useState<string>("all");
+  const [selectedFilter, setSelectedFilter] = useState<string>('all');
 
   const handleFilterClick = (filter: string) => {
     setSelectedFilter(filter);
@@ -19,14 +19,14 @@ const LogbookButtonFilter: React.FC<LogbookButtonFilterProps> = ({
   const getButtonColors = (filter: string) => {
     const isSelected = filter === selectedFilter;
     return {
-      color: isSelected ? "#5cb874" : "#0f172a",
-      textColor: isSelected ? "#0f172a" : "#5cb874",
+      color: isSelected ? '#5cb874' : '#0f172a',
+      textColor: isSelected ? '#0f172a' : '#5cb874',
     };
   };
 
   return (
     <View className="w-full flex flex-row items-center">
-      {["all", "progress", "done"].map((filter) => {
+      {['all', 'progress', 'done'].map((filter) => {
         const { color, textColor } = getButtonColors(filter);
         return (
           <View key={filter} className="w-28 mr-2">
