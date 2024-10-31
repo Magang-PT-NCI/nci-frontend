@@ -1,4 +1,4 @@
-import {ReportResData} from "../interfaces/report.dto";
+import { ReportResData } from '../interfaces/report.dto';
 
 export type StackParamList = {
   Splash: any;

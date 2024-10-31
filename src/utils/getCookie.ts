@@ -1,4 +1,4 @@
-import * as SecureStore from "expo-secure-store";
+import * as SecureStore from 'expo-secure-store';
 
 export async function getCookie(key: string) {
   try {
@@ -7,7 +7,7 @@ export async function getCookie(key: string) {
       return result;
     }
   } catch (error) {
-    console.log("Error retrieving cookie:", error);
+    console.log('Error retrieving cookie:', error);
   }
   return null;
 }

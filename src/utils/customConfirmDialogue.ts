@@ -1,25 +1,23 @@
-import { Alert } from "react-native";
+import { Alert } from 'react-native';
 
 const customConfirmDialogue = (
   title: string,
   message: string,
   pressCancel: () => void,
-  pressConfirm: () => void
+  pressConfirm: () => void,
 ) => {
   Alert.alert(title, message, [
     {
-      text: "Batal",
+      text: 'Batal',
       onPress: () => {
         pressCancel();
-        console.log("Pengajuan dibatalkan");
       },
-      style: "cancel",
+      style: 'cancel',
     },
     {
-      text: "Ya",
+      text: 'Ya',
       onPress: () => {
         pressConfirm();
-        console.log("Pengajuan dikirim:");
       },
     },
   ]);
