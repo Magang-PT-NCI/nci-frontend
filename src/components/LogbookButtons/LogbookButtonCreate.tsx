@@ -5,16 +5,16 @@ import {
   Modal,
   TextInput,
   TouchableWithoutFeedback,
-} from "react-native";
-import React, { useState } from "react";
-import ButtonCustom from "../ButtonCustom";
-import { Ionicons } from "@expo/vector-icons";
-import DateTimePicker from "react-native-modal-datetime-picker";
-import DropdownCustom from "../DropdownCustom";
-import ApiRequest from "../../utils/ApiRequest";
-import { Endpoint } from "../../enums/api-enum";
-import { getCookie } from "../../utils/getCookie";
-import {LogbookReqBody, LogbookResData} from "../../interfaces/logbook.dto";
+} from 'react-native';
+import React, { useState } from 'react';
+import ButtonCustom from '../ButtonCustom';
+import { Ionicons } from '@expo/vector-icons';
+import DateTimePicker from 'react-native-modal-datetime-picker';
+import DropdownCustom from '../DropdownCustom';
+import ApiRequest from '../../utils/ApiRequest';
+import { Endpoint } from '../../enums/endpoint-class';
+import { getCookie } from '../../utils/getCookie';
+import { LogbookReqBody, LogbookResData } from '../../interfaces/logbook.dto';
 
 interface LogbookButtonCreateProps {
   attendanceID: number;
@@ -28,14 +28,14 @@ const LogbookButtonCreate: React.FC<LogbookButtonCreateProps> = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
   const [selectedTimeButton, setSelectedTimeButton] = useState<
-    "start" | "end" | null
+    'start' | 'end' | null
   >(null);
-  const [startTime, setStartTime] = useState<string>("Jam Mulai");
-  const [endTime, setEndTime] = useState<string>("Jam Selesai");
-  const [selectedStatus, setSelectedStatus] = useState<string>("");
-  const [activityDescription, setActivityDescription] = useState<string>("");
+  const [startTime, setStartTime] = useState<string>('Jam Mulai');
+  const [endTime, setEndTime] = useState<string>('Jam Selesai');
+  const [selectedStatus, setSelectedStatus] = useState<string>('');
+  const [activityDescription, setActivityDescription] = useState<string>('');
 
-  const showDatePicker = (button: "start" | "end") => {
+  const showDatePicker = (button: 'start' | 'end') => {
     setSelectedTimeButton(button);
     setIsDatePickerVisible(true);
   };
@@ -45,13 +45,13 @@ const LogbookButtonCreate: React.FC<LogbookButtonCreateProps> = ({
   };
 
   const handleConfirm = (date: Date) => {
-    const hours = date.getHours().toString().padStart(2, "0");
-    const minutes = date.getMinutes().toString().padStart(2, "0");
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
     const formattedTime = `${hours}:${minutes}`;
 
-    if (selectedTimeButton === "start") {
+    if (selectedTimeButton === 'start') {
       setStartTime(formattedTime);
-    } else if (selectedTimeButton === "end") {
+    } else if (selectedTimeButton === 'end') {
       setEndTime(formattedTime);
     }
 
@@ -59,8 +59,8 @@ const LogbookButtonCreate: React.FC<LogbookButtonCreateProps> = ({
   };
 
   const logbook_status = [
-    { label: "done", value: "done" },
-    { label: "progress", value: "progress" },
+    { label: 'done', value: 'done' },
+    { label: 'progress', value: 'progress' },
   ];
 
   const handleStatusChange = (value: string) => {
@@ -69,15 +69,17 @@ const LogbookButtonCreate: React.FC<LogbookButtonCreateProps> = ({
 
   const handleSubmitLogbook = async () => {
     if (isFormValid()) {
-      console.log("Start Time:", startTime);
-      console.log("End Time:", endTime);
-      console.log("Status:", selectedStatus);
-      console.log("Activity Description:", activityDescription);
-
-      const token = await getCookie("token");
+      const token = await getCookie('token');
       if (token) {
+        console.log({
+          attendance_id: attendanceID,
+          start_time: startTime,
+          end_time: endTime,
+          status: selectedStatus,
+          description: activityDescription,
+        });
         const response = await new ApiRequest<LogbookReqBody, LogbookResData>(
-          Endpoint.Logbook
+          Endpoint.Logbook,
         )
           .setToken(token)
           .setReqBody({
@@ -90,9 +92,9 @@ const LogbookButtonCreate: React.FC<LogbookButtonCreateProps> = ({
           .post();
 
         onSubmit(response.getData());
-        setStartTime("Jam Mulai");
-        setEndTime("Jam Selesai");
-        setActivityDescription("");
+        setStartTime('Jam Mulai');
+        setEndTime('Jam Selesai');
+        setActivityDescription('');
         setIsModalOpen(false);
       }
     }
@@ -100,10 +102,10 @@ const LogbookButtonCreate: React.FC<LogbookButtonCreateProps> = ({
 
   const isFormValid = () => {
     return (
-      startTime !== "Jam Mulai" &&
-      endTime !== "Jam Selesai" &&
+      startTime !== 'Jam Mulai' &&
+      endTime !== 'Jam Selesai' &&
       selectedStatus !== null &&
-      activityDescription.trim() !== ""
+      activityDescription.trim() !== ''
     );
   };
 
@@ -127,9 +129,9 @@ const LogbookButtonCreate: React.FC<LogbookButtonCreateProps> = ({
             <TouchableWithoutFeedback>
               <View
                 className="w-full border rounded-lg p-5"
-                style={{ borderColor: "#5cb874", backgroundColor: "#0f172a" }}
+                style={{ borderColor: '#5cb874', backgroundColor: '#0f172a' }}
               >
-                <View className="w-full flex-row justify-between">
+                <View className="w-full flex-row justify-between items-center">
                   <Text className="text-textDefault text-lg">
                     Buat Aktivitas
                   </Text>
@@ -141,13 +143,13 @@ const LogbookButtonCreate: React.FC<LogbookButtonCreateProps> = ({
                   <View className="w-28 mr-2">
                     <ButtonCustom
                       title={startTime}
-                      callbackEvt={() => showDatePicker("start")}
+                      callbackEvt={() => showDatePicker('start')}
                     />
                   </View>
                   <View className="w-28">
                     <ButtonCustom
                       title={endTime}
-                      callbackEvt={() => showDatePicker("end")}
+                      callbackEvt={() => showDatePicker('end')}
                     />
                   </View>
                 </View>

@@ -1,5 +1,5 @@
-import { View, Text } from "react-native";
-import React from "react";
+import { View, Text } from 'react-native';
+import React from 'react';
 
 interface LogbookCardProps {
   timeStart: string;
@@ -22,7 +22,7 @@ const LogbookCard: React.FC<LogbookCardProps> = ({
         </Text>
         <Text
           className={`${
-            status === "done" ? "bg-green-600" : "bg-blue-500"
+            status === 'done' ? 'bg-green-600' : 'bg-blue-500'
           } text-center rounded px-3 py-1 text-background font-bold `}
         >
           {status}

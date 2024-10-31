@@ -1,30 +1,31 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Keyboard,
   TouchableWithoutFeedback,
   ScrollView,
-} from "react-native";
-import LoginImage from "../../../assets/image/dev_app_illustration";
-import { SafeAreaView } from "react-native-safe-area-context";
-import FormLogin from "./FormLogin";
-import { useNavigation } from "@react-navigation/native";
-import ApiRequest from "../../utils/ApiRequest";
-import { Endpoint } from "../../enums/api-enum";
-import { setCookie } from "../../utils/setCookie";
-import { ApiError } from "../../interfaces/api-error";
-import {LoginReqBody, LoginResdata} from "../../interfaces/auth.dto";
+} from 'react-native';
+// @ts-ignore
+import LoginImage from '../../../assets/image/dev_app_illustration';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import FormLogin from './FormLogin';
+import { StackActions, useNavigation } from '@react-navigation/native';
+import ApiRequest from '../../utils/ApiRequest';
+import { Endpoint } from '../../enums/endpoint-class';
+import { setCookie } from '../../utils/setCookie';
+import { ApiError } from '../../interfaces/api-error';
+import { LoginReqBody, LoginResdata } from '../../interfaces/auth.dto';
 
 const LoginPage = () => {
   const navigation = useNavigation();
-  const [alertMessage, setAlertMessage] = useState("");
+  const [alertMessage, setAlertMessage] = useState('');
 
   useEffect(() => {
     const keyboardDidHideListener = Keyboard.addListener(
-      "keyboardDidHide",
+      'keyboardDidHide',
       () => {
         Keyboard.dismiss();
-      }
+      },
     );
 
     return () => {
@@ -34,15 +35,18 @@ const LoginPage = () => {
 
   const handleFormSubmit = async (data: LoginReqBody) => {
     const loginSuccess = (data: LoginResdata) => {
-      setCookie("token", data.token);
+      setCookie('token', data.token);
 
       const profile_photo = data.profile_photo;
       const NIK = data.nik;
-      if (data.user_role === "OnSite") {
-
-        navigation.replace("OnsiteMain", { profile_photo, NIK });
+      if (data.user_role === 'OnSite') {
+        navigation.dispatch(
+          StackActions.replace('OnsiteMain', { profile_photo, NIK }),
+        );
       } else {
-        navigation.replace("CoordinatorMain", { profile_photo, NIK });
+        navigation.dispatch(
+          StackActions.replace('CoordinatorMain', { profile_photo, NIK }),
+        );
       }
     };
 

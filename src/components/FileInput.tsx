@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import { View, Text, TouchableOpacity, Alert, StyleSheet } from "react-native";
-import * as DocumentPicker from "expo-document-picker";
-import { Feather } from "@expo/vector-icons";
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, Alert, StyleSheet } from 'react-native';
+import * as DocumentPicker from 'expo-document-picker';
+import { Feather } from '@expo/vector-icons';
 
 interface FileInputProps {
   onFileSelect: (file: DocumentPicker.DocumentPickerResult) => void;
@@ -16,7 +16,7 @@ const FileInput: React.FC<FileInputProps> = ({ onFileSelect }) => {
       setFileName(result.assets[0].name);
       onFileSelect(result); // Passing the selected file back to parent
     } else {
-      Alert.alert("Pemilihan file dibatalkan");
+      Alert.alert('Pemilihan file dibatalkan');
     }
   };
 
@@ -33,10 +33,10 @@ const FileInput: React.FC<FileInputProps> = ({ onFileSelect }) => {
 
 const styles = StyleSheet.create({
   button: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     padding: 10,
-    borderColor: "#5cb874",
+    borderColor: '#5cb874',
     borderWidth: 1,
     borderRadius: 8,
   },

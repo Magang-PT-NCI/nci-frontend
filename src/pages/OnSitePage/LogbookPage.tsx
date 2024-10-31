@@ -1,10 +1,9 @@
-import { View, ScrollView } from "react-native";
-import React, { useEffect, useState } from "react";
-import LogbookCard from "../../components/LogbookCard";
-import LogbookButtonFilter from "../../components/LogbookButtons/LogbookButtonFilter";
-import LogbookButtonCreate from "../../components/LogbookButtons/LogbookButtonCreate";
-import {Logbook, LogbookResData} from "../../interfaces/logbook.dto";
-
+import { View, ScrollView } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import LogbookCard from '../../components/LogbookCard';
+import LogbookButtonFilter from '../../components/LogbookButtons/LogbookButtonFilter';
+import LogbookButtonCreate from '../../components/LogbookButtons/LogbookButtonCreate';
+import { Logbook, LogbookResData } from '../../interfaces/logbook.dto';
 
 interface LogbookPageProps {
   logbookData: Logbook[];
@@ -19,7 +18,7 @@ const LogbookPage: React.FC<LogbookPageProps> = ({
   const [filteredData, setFilteredData] = useState<Logbook[]>([]);
 
   const filterLogbookData = (filter: string) => {
-    if (filter === "all") {
+    if (filter === 'all') {
       setFilteredData(logbook);
     } else {
       setFilteredData(logbook.filter((item) => item.status === filter));
@@ -33,11 +32,11 @@ const LogbookPage: React.FC<LogbookPageProps> = ({
   };
 
   useEffect(() => {
-    filterLogbookData("all");
+    filterLogbookData('all');
   }, [logbook]);
 
   useEffect(() => {
-    setLogbook(logbookData);
+    setLogbook(logbookData || []);
   }, [logbookData]);
 
   return (
@@ -50,6 +49,7 @@ const LogbookPage: React.FC<LogbookPageProps> = ({
         />
       </View>
 
+      {/*@ts-ignore*/}
       <ScrollView style={{ showsVerticalScrollIndicator: false }}>
         {filteredData?.map((item, index) => (
           <LogbookCard

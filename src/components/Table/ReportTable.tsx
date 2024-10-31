@@ -1,43 +1,57 @@
-import { View, Text } from "react-native";
-import React, {useEffect, useState} from "react";
-import ReportTableRow from "./ReportTableRow";
-import { ScrollView } from "react-native-gesture-handler";
-import {getCookie} from "../../utils/getCookie";
-import ApiRequest from "../../utils/ApiRequest";
-import {ParamsReq} from "../../interfaces/api-request";
-import {DashboardResData} from "../../interfaces/dashboard.dto";
-import {Endpoint} from "../../enums/api-enum";
-import {ReportResData} from "../../interfaces/report.dto";
+import { View, Text } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import ReportTableRow from './ReportTableRow';
+import { ScrollView } from 'react-native-gesture-handler';
+import { getCookie } from '../../utils/getCookie';
+import ApiRequest from '../../utils/ApiRequest';
+import { ParamsReq } from '../../interfaces/api-request';
+import { DashboardResData } from '../../interfaces/dashboard.dto';
+import { Endpoint } from '../../enums/endpoint-class';
+import { ReportResData } from '../../interfaces/report.dto';
+import dayjs from 'dayjs';
+import { useIsFocused } from '@react-navigation/native';
 
-const ReportTable = () => {
+interface ReportTableProps {
+  keyword: string;
+  startDate: string;
+  endDate: string;
+}
+
+const ReportTable: React.FC<ReportTableProps> = ({
+  keyword,
+  startDate,
+  endDate,
+}) => {
   const [reportData, setReportData] = useState([] as ReportResData[]);
+  const isFocused = useIsFocused();
 
   const getReport = async () => {
-    const token = (await getCookie("token")) || "";
+    const token = (await getCookie('token')) || '';
     const response = await new ApiRequest<ParamsReq, ReportResData[]>(
-        Endpoint.Monitoring
+      Endpoint.Monitoring,
     )
       .setToken(token)
-      .setPathParam("report")
-      .setParams({ from: "2024-10-03" })
+      .setPathParam('report')
+      .setParams({ keyword: keyword, from: startDate, to: endDate })
       .get();
 
-    setReportData(response.getData());
+    const data = response.getData();
+    console.log(data);
 
-    // console.log(JSON.stringify(response.getData(), null, 2));
-
+    if (data) {
+      setReportData(response.getData());
+    }
   };
 
   useEffect(() => {
-    getReport();
-  }, []);
-
+    if (isFocused) getReport();
+  }, [keyword, startDate, endDate, isFocused]);
 
   return (
     <ScrollView
-        className=''
+      className=""
       horizontal={true}
-      contentContainerStyle={{ flexDirection: "row", flexGrow: 1 }}
+      contentContainerStyle={{ flexDirection: 'row', flexGrow: 1 }}
     >
       <View className="w-full h-fit ">
         <View className="w-full flex flex-row border-b border-accentGreen justify-between items-center py-2">
@@ -58,7 +72,9 @@ const ReportTable = () => {
             </Text>
           </View>
           <View className="w-36 ">
-            <Text className="text-accentYellow font-bold text-center">Jam Kerja</Text>
+            <Text className="text-accentYellow font-bold text-center">
+              Jam Kerja
+            </Text>
           </View>
           <View className="w-20 ">
             <Text className="text-accentYellow font-bold text-center">
@@ -67,17 +83,20 @@ const ReportTable = () => {
           </View>
         </View>
 
-        {reportData.map((onsite, index) => (
-          <ReportTableRow
-            key={index}
-            number={(index + 1).toString()}
-            nik={onsite.nik}
-            name={onsite.name}
-            date={onsite.date}
-            working_hours={onsite.working_hours}
-            status={onsite.status}
-          />
-        ))}
+        {reportData.map((onsite, index) => {
+          const status = onsite.late ? 'Terlambat' : onsite.status;
+          return (
+            <ReportTableRow
+              key={index}
+              number={(index + 1).toString()}
+              nik={onsite.nik}
+              name={onsite.name}
+              date={onsite.date}
+              working_hours={onsite.working_hours}
+              status={status}
+            />
+          );
+        })}
       </View>
     </ScrollView>
   );

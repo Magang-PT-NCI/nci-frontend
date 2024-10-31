@@ -4,28 +4,31 @@ import {
   Modal,
   TouchableOpacity,
   TouchableWithoutFeedback,
-} from "react-native";
-import React, { useState } from "react";
-import DateTimePicker from "react-native-ui-datepicker";
-import dayjs from "dayjs";
-import { Ionicons } from "@expo/vector-icons";
+} from 'react-native';
+import React, { useState } from 'react';
+import DateTimePicker, { DateType } from 'react-native-ui-datepicker';
+import dayjs from 'dayjs';
+import { Ionicons } from '@expo/vector-icons';
 
 interface DateItemProps {
   onDateChange?: (date: string) => void;
-  type: "inner" | "outer";
+  type: 'inner' | 'outer';
 }
 
 const DateItem: React.FC<DateItemProps> = ({ onDateChange, type }) => {
-  const [date, setDate] = useState<Date | null>(null);
+  const [date, setDate] = useState<DateType | null>(null);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
 
-  const minDate = dayjs().startOf("day").toDate();
+  const minDate =
+    type === 'outer' ? dayjs().startOf('day').toDate() : undefined;
 
-  const handleDateChange = (selectedDate: Date) => {
-    const formattedDate = dayjs(selectedDate).format("YYYY-MM-DD");
+  const handleDateChange = (selectedDate: DateType) => {
+    const formattedDate = dayjs(selectedDate).format('YYYY-MM-DD');
     setDate(selectedDate);
-    onDateChange(formattedDate);
-    setModalVisible(false);
+    if (onDateChange) {
+      onDateChange(formattedDate);
+    }
+    // setModalVisible(false);
   };
 
   return (
@@ -33,32 +36,32 @@ const DateItem: React.FC<DateItemProps> = ({ onDateChange, type }) => {
       <TouchableOpacity
         onPress={() => setModalVisible(true)}
         style={{
-          flexDirection: "row",
-          alignItems: "center",
+          flexDirection: 'row',
+          alignItems: 'center',
           padding: 10,
-          backgroundColor: "#5cb874",
+          backgroundColor: '#5cb874',
           borderRadius: 8,
         }}
       >
         <Ionicons name="calendar" size={20} color="#0f172a" />
-        {type === "outer" ? (
+        {type === 'outer' ? (
           <Text className="text-background ml-2 font-semibold">
             Pilih Tanggal Izin
           </Text>
         ) : (
           <Text className="text-background ml-2 font-semibold">
-            {date ? `${dayjs(date).format("DD MMM YYYY")}` : "Pilih Tanggal"}
+            {date ? `${dayjs(date).format('DD MMM YYYY')}` : 'Pilih Tanggal'}
           </Text>
         )}
       </TouchableOpacity>
-      {type === "outer" ? (
+      {type === 'outer' ? (
         <Text className="mt-3 text-accentYellow">
           {date
-            ? `Tanggal Terpilih: ${dayjs(date).format("DD MMM YYYY")}`
-            : "Belum ada tanggal yang terpilih"}
+            ? `Tanggal Terpilih: ${dayjs(date).format('DD MMM YYYY')}`
+            : 'Belum ada tanggal yang terpilih'}
         </Text>
       ) : (
-        ""
+        ''
       )}
 
       <Modal
@@ -71,8 +74,8 @@ const DateItem: React.FC<DateItemProps> = ({ onDateChange, type }) => {
           <View
             style={{
               flex: 1,
-              justifyContent: "center",
-              backgroundColor: "rgba(0,0,0,0.5)",
+              justifyContent: 'center',
+              backgroundColor: 'rgba(0,0,0,0.5)',
             }}
           >
             <TouchableWithoutFeedback onPress={() => {}}>
@@ -80,7 +83,7 @@ const DateItem: React.FC<DateItemProps> = ({ onDateChange, type }) => {
                 style={{
                   marginHorizontal: 20,
                   padding: 20,
-                  backgroundColor: "#94a3b8",
+                  backgroundColor: '#94a3b8',
                   borderRadius: 10,
                 }}
               >
@@ -96,12 +99,12 @@ const DateItem: React.FC<DateItemProps> = ({ onDateChange, type }) => {
                   style={{
                     marginTop: 20,
                     padding: 10,
-                    backgroundColor: "#ffcc00",
+                    backgroundColor: '#ffcc00',
                     borderRadius: 8,
-                    alignItems: "center",
+                    alignItems: 'center',
                   }}
                 >
-                  <Text style={{ color: "#0f172a", fontWeight: "bold" }}>
+                  <Text style={{ color: '#0f172a', fontWeight: 'bold' }}>
                     Tutup
                   </Text>
                 </TouchableOpacity>

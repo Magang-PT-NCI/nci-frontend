@@ -1,26 +1,26 @@
-import { View, useWindowDimensions } from "react-native";
-import React from "react";
-import { TabView, TabBar } from "react-native-tab-view";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import HeaderBar from "./HeaderBar";
-import DashboardPage from "../pages/CoordPage/DashboardPage";
-import ReportPage from "../pages/CoordPage/ReportPage";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { StackParamList } from "../utils/StackParamList";
+import { View, useWindowDimensions } from 'react-native';
+import React from 'react';
+import { TabView, TabBar } from 'react-native-tab-view';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import HeaderBar from './HeaderBar';
+import DashboardPage from '../pages/CoordPage/DashboardPage';
+import ReportPage from '../pages/CoordPage/ReportPage';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { StackParamList } from '../utils/StackParamList';
 
 const renderTabBar = (props: any) => (
   <TabBar
     {...props}
-    indicatorStyle={{ backgroundColor: "#ffcc00" }}
-    style={{ backgroundColor: "#0f172a" }}
-    labelStyle={{ color: "#94a3b8", fontWeight: "bold" }}
+    indicatorStyle={{ backgroundColor: '#ffcc00' }}
+    style={{ backgroundColor: '#0f172a' }}
+    labelStyle={{ color: '#94a3b8', fontWeight: 'bold' }}
     activeColor="#ffcc00"
   />
 );
 
 type CoordinatorMainProps = NativeStackScreenProps<
   StackParamList,
-  "CoordinatorMain"
+  'CoordinatorMain'
 >;
 
 const CoordinatorMain: React.FC<CoordinatorMainProps> = ({ route }) => {
@@ -35,9 +35,9 @@ const CoordinatorMain: React.FC<CoordinatorMainProps> = ({ route }) => {
 
   const renderScene = ({ route }: renderSceneProps) => {
     switch (route.key) {
-      case "dashboard":
+      case 'dashboard':
         return <DashboardPage />;
-      case "report":
+      case 'report':
         return <ReportPage />;
       default:
         return null;
@@ -46,8 +46,8 @@ const CoordinatorMain: React.FC<CoordinatorMainProps> = ({ route }) => {
 
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
-    { key: "dashboard", title: "Dashboard" },
-    { key: "report", title: "Laporan" },
+    { key: 'dashboard', title: 'Dashboard' },
+    { key: 'report', title: 'Laporan' },
   ]);
 
   return (
@@ -56,10 +56,10 @@ const CoordinatorMain: React.FC<CoordinatorMainProps> = ({ route }) => {
         flex: 1,
         paddingTop: insets.top,
         paddingBottom: insets.bottom,
-        backgroundColor: "#0f172a",
+        backgroundColor: '#0f172a',
       }}
     >
-      <HeaderBar image_profile={profile_photo} />
+      <HeaderBar image_profile={profile_photo} role="coordinator" />
 
       <TabView
         navigationState={{ index, routes }}

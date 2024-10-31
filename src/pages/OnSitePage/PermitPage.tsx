@@ -1,19 +1,18 @@
 // PermitPage.tsx
-import { View, Text, Alert } from "react-native";
-import React, { useState } from "react";
-import DropdownCustom from "../../components/DropdownCustom";
-import ButtonCustom from "../../components/ButtonCustom";
-import CheckBox from "expo-checkbox";
-import DateItem from "../../components/DateItem";
-import customConfirmDialogue from "../../utils/customConfirmDialogue";
-import FileInput from "../../components/FileInput";
-import { DocumentResult } from "expo-document-picker";
-import { getCookie } from "../../utils/getCookie";
-import { useNavigation } from "@react-navigation/native";
-
-import { Endpoint } from "../../enums/api-enum";
-import ApiRequest from "../../utils/ApiRequest";
-import {PermitResData} from "../../interfaces/permit.dto";
+import { View, Text } from 'react-native';
+import React, { useState } from 'react';
+import DropdownCustom from '../../components/DropdownCustom';
+import ButtonCustom from '../../components/ButtonCustom';
+import CheckBox from 'expo-checkbox';
+import DateItem from '../../components/DateItem';
+import customConfirmDialogue from '../../utils/customConfirmDialogue';
+import FileInput from '../../components/FileInput';
+import * as DocumentPicker from 'expo-document-picker';
+import { getCookie } from '../../utils/getCookie';
+import { StackActions, useNavigation } from '@react-navigation/native';
+import { Endpoint } from '../../enums/endpoint-class';
+import ApiRequest from '../../utils/ApiRequest';
+import { PermitResData } from '../../interfaces/permit.dto';
 
 type PermitPageProps = {
   NIK: string;
@@ -24,42 +23,43 @@ const PermitPage: React.FC<PermitPageProps> = ({ NIK }) => {
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [selectedDays, setSelectedDays] = useState<string | null>(null);
   const [selectedReason, setSelectedReason] = useState<string | null>(null);
-  const [selectedFile, setSelectedFile] = useState<DocumentResult | null>(null);
-  const [fileName, setFileName] = useState("");
+  const [selectedFile, setSelectedFile] =
+    useState<DocumentPicker.DocumentPickerResult | null>(null);
+  const [fileName, setFileName] = useState('');
 
   const navigation = useNavigation();
 
   const data_hari_izin = [
-    { label: "1 Hari", value: "1" },
-    { label: "2 Hari", value: "2" },
-    { label: "3 Hari", value: "3" },
+    { label: '1 Hari', value: '1' },
+    { label: '2 Hari', value: '2' },
+    { label: '3 Hari', value: '3' },
   ];
   const data_alasan_izin = [
-    { label: "Sakit", value: "sick" },
-    { label: "Keperluan Mendadak", value: "urgent_reason" },
-    { label: "Lainnya", value: "other" },
+    { label: 'Sakit', value: 'sakit' },
+    { label: 'Keperluan Mendadak', value: 'urusan_mendadak' },
+    { label: 'Cuti', value: 'cuti' },
+    { label: 'Duka', value: 'duka' },
+    { label: 'Melahirkan', value: 'melahirkan' },
+    { label: 'Lainnya', value: 'lainnya' },
   ];
 
   const handleDateChange = (date: string) => {
     setSelectedDate(date);
-    console.log("Tanggal terpilih:", date);
   };
 
   const handleDaysChange = (value: string) => {
     setSelectedDays(value);
-    console.log("Jumlah Hari Izin:", value);
   };
 
   const handleReasonChange = (value: string) => {
     setSelectedReason(value);
-    console.log("Alasan Izin:", value);
   };
 
-  const handleFileSelect = (file: DocumentResult) => {
+  const handleFileSelect = (file: DocumentPicker.DocumentPickerResult) => {
     setSelectedFile(file);
-    setFileName(file.assets[0].name);
-    console.log("File selected:", JSON.stringify(file, null, 2));
-    console.log(file.assets[0].name);
+    if (file?.assets && file?.assets.length > 0) {
+      setFileName(file.assets[0].name);
+    }
   };
 
   const isFormComplete =
@@ -70,43 +70,49 @@ const PermitPage: React.FC<PermitPageProps> = ({ NIK }) => {
 
   const handleSubmit = () => {
     customConfirmDialogue(
-      "Konfirmasi Pengajuan Izin",
-      "Apakah Anda yakin akan mengirim pengajuan?",
+      'Konfirmasi Pengajuan Izin',
+      'Apakah Anda yakin akan mengirim pengajuan?',
       handleCancelSubmit,
-      handleConfirmSubmit
+      handleConfirmSubmit,
     );
   };
 
   const handleCancelSubmit = () => {
-    console.log("submit dibatalkan");
+    console.log('submit dibatalkan');
   };
 
   const handleConfirmSubmit = async () => {
-    const token = await getCookie("token");
+    const token = await getCookie('token');
 
     const formData = new FormData();
 
     if (token) {
-      formData.append("nik", NIK);
-      formData.append("reason", selectedReason);
-      formData.append("start_date", selectedDate);
-      formData.append("duration", selectedDays);
-      formData.append("permission_letter", {
-        uri: selectedFile,
-        name: "letter",
-        type: selectedFile.mimeType || "application/pdf",
-      });
+      if (selectedFile?.assets && selectedFile?.assets.length > 0) {
+        const file = selectedFile?.assets[0];
 
-      await new ApiRequest<FormData, PermitResData>(Endpoint.Permit)
-        .setToken(token)
-        .setContentType("multipart/form-data")
-        .setReqBody(formData)
-        .post(
-          (data) => console.log(data),
-          (error) => console.log(JSON.stringify(error, null, 2))
-        );
+        formData.append('nik', NIK);
+        formData.append('reason', selectedReason as string);
+        formData.append('start_date', selectedDate as string);
+        formData.append('duration', selectedDays as string);
+        formData.append('permission_letter', {
+          uri: file.uri,
+          name: file.name,
+          type: file.mimeType,
+        } as unknown as Blob);
+
+        await new ApiRequest<FormData, PermitResData>(Endpoint.Permit)
+          .setToken(token)
+          .setContentType('multipart/form-data')
+          .setReqBody(formData)
+          .post(
+            (data) => {},
+            (error) => {
+              console.log('Error:', error);
+            },
+          );
+      }
     } else {
-      navigation.replace("LoginPage");
+      navigation.dispatch(StackActions.replace('LoginPage'));
     }
   };
 
@@ -135,7 +141,7 @@ const PermitPage: React.FC<PermitPageProps> = ({ NIK }) => {
           className="w-5 h-5"
           value={toggleCheckBox}
           onValueChange={setToggleCheckBox}
-          color={isFormComplete ? "#5cb874" : "gray"}
+          color={isFormComplete ? '#5cb874' : 'gray'}
           disabled={!isFormComplete}
         />
         <Text className="text-textDefault ml-4">

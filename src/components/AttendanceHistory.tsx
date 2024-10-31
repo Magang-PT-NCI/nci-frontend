@@ -1,7 +1,9 @@
-import { View, Text } from "react-native";
-import React from "react";
-import CheckInIcon from "../../assets/icons/checkinIcon";
-import CheckOutIcon from "../../assets/icons/checkoutIcon";
+import { View, Text } from 'react-native';
+import React from 'react';
+// @ts-ignore
+import CheckInIcon from '../../assets/icons/checkinIcon';
+// @ts-ignore
+import CheckOutIcon from '../../assets/icons/checkoutIcon';
 
 interface AttendanceHistoryProps {
   checkInTime?: string;
@@ -23,14 +25,14 @@ const AttendanceHistory: React.FC<AttendanceHistoryProps> = ({
           <CheckInIcon height={40} width={40} />
           <Text className="text-textDefault w-1/2">Check In</Text>
           <Text className="text-textDefault">
-            {checkInTime ? checkInTime : "- - : - -"}
+            {checkInTime ? checkInTime : '- - : - -'}
           </Text>
         </View>
         <View className="flex flex-row gap-1 w-full justify-between items-center">
           <CheckOutIcon height={40} width={40} />
           <Text className="text-textDefault w-1/2">Check Out</Text>
           <Text className="text-textDefault">
-            {checkOutTime ? checkOutTime : "- - : - -"}
+            {checkOutTime ? checkOutTime : '- - : - -'}
           </Text>
         </View>
       </View>
