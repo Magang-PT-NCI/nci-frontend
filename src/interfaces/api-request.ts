@@ -1,6 +1,6 @@
 export interface HeadersReq {
   authorization?: string;
-  "Content-Type"?: string;
+  'Content-Type'?: string;
 }
 
 export interface ParamsReq {
@@ -10,6 +10,3 @@ export interface ParamsReq {
   from?: string;
   to?: string;
 }
-
-
-

@@ -6,4 +6,5 @@ export enum Endpoint {
   Logbook,
   Monitoring,
   Permit,
+  Notification,
 }
