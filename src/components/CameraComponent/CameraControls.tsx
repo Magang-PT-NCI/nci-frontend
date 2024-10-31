@@ -1,6 +1,6 @@
-import React from "react";
-import { View, TouchableOpacity, Text } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import React from 'react';
+import { View, TouchableOpacity, Text } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
 type CameraControlsProps = {
   onToggleFacing?: () => void;
@@ -16,7 +16,8 @@ const CameraControls: React.FC<CameraControlsProps> = ({
   requestPermission,
 }) => {
   if (requestPermission) {
-    return requestPermission();
+    requestPermission();
+    return;
   }
 
   return (

@@ -1,9 +1,9 @@
-import { CameraView, CameraType, useCameraPermissions } from "expo-camera";
-import { useState, useRef } from "react";
-import { View, Modal, StyleSheet } from "react-native";
-import * as ImageManipulator from "expo-image-manipulator";
-import CameraControls from "./CameraControls";
-import CameraPreview from "./CameraPreview";
+import { CameraView, CameraType, useCameraPermissions } from 'expo-camera';
+import { useState, useRef } from 'react';
+import { View, Modal, StyleSheet } from 'react-native';
+import * as ImageManipulator from 'expo-image-manipulator';
+import CameraControls from './CameraControls';
+import CameraPreview from './CameraPreview';
 
 type CameraComponentProps = {
   onCapture: (photo: string) => void;
@@ -14,7 +14,7 @@ const CameraComponent: React.FC<CameraComponentProps> = ({
   onCapture,
   onCancel,
 }) => {
-  const [facing, setFacing] = useState<CameraType>("front");
+  const [facing, setFacing] = useState<CameraType>('front');
   const [permission, requestPermission] = useCameraPermissions();
   const [photo, setPhoto] = useState<string | null>(null);
   const cameraRef = useRef<any>(null);
@@ -30,16 +30,15 @@ const CameraComponent: React.FC<CameraComponentProps> = ({
   }
 
   const toggleCameraFacing = () =>
-    setFacing((current) => (current === "back" ? "front" : "back"));
+    setFacing((current) => (current === 'back' ? 'front' : 'back'));
 
   const takePicture = async () => {
     if (cameraRef.current) {
       const photoData = await cameraRef.current.takePictureAsync({
         quality: 1,
         base64: false,
-        ratio: "1:1", // 1:1 aspect ratio for the camera
+        ratio: '1:1', // 1:1 aspect ratio for the camera
       });
-      console.log(`Width: ${photoData.width}, Height: ${photoData.height}`);
 
       // Crop the image to 300x300 px
       const croppedPhoto = await ImageManipulator.manipulateAsync(
@@ -54,18 +53,17 @@ const CameraComponent: React.FC<CameraComponentProps> = ({
             },
           },
         ],
-        { compress: 1, format: ImageManipulator.SaveFormat.JPEG }
+        { compress: 1, format: ImageManipulator.SaveFormat.JPEG },
       );
 
       // Resize to 300x300
       const resizedPhoto = await ImageManipulator.manipulateAsync(
         croppedPhoto.uri,
         [{ resize: { width: 300, height: 300 } }],
-        { compress: 1, format: ImageManipulator.SaveFormat.JPEG }
+        { compress: 1, format: ImageManipulator.SaveFormat.JPEG },
       );
 
       setPhoto(resizedPhoto.uri); // Set the resized photo URI
-      console.log(resizedPhoto);
     }
   };
 
@@ -109,14 +107,14 @@ const CameraComponent: React.FC<CameraComponentProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   cameraContainer: {
     width: 384,
     height: 384, // Set the camera container to 300x300px
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   camera: {
     flex: 1,
