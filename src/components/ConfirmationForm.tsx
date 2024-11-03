@@ -71,6 +71,13 @@ const ConfirmationForm: React.FC<ConfirmationFormProps> = ({
     );
   };
 
+  const clearForm = () => {
+    setSelectedType('');
+    setDescription('');
+    setSelectedReason('');
+    setIsModalOpen(false);
+  };
+
   const handleSubmitConfirmation = async () => {
     const token = await getCookie('token');
     const formdata = new FormData();
@@ -102,6 +109,7 @@ const ConfirmationForm: React.FC<ConfirmationFormProps> = ({
                   text: 'Mengerti',
                   onPress: () => {
                     console.log(data);
+                    clearForm();
                   },
                 },
               ],

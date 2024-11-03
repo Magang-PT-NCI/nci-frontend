@@ -9,6 +9,7 @@ interface DropdownCustomProps {
   data: { label: string; value: string }[];
   onValueChange: (value: string) => void;
   isDisabled?: boolean;
+  bgColor?: string;
 }
 
 const DropdownCustom: React.FC<DropdownCustomProps> = ({
@@ -17,6 +18,7 @@ const DropdownCustom: React.FC<DropdownCustomProps> = ({
   data,
   onValueChange,
   isDisabled,
+  bgColor = '#0f172a',
 }) => {
   const [value, setValue] = useState<string | null>(null);
 
@@ -28,6 +30,9 @@ const DropdownCustom: React.FC<DropdownCustomProps> = ({
           height: 50,
           borderBottomColor: 'gray',
           borderBottomWidth: 0.5,
+          backgroundColor: bgColor,
+          borderRadius: 4,
+          padding: 10,
         }}
         disable={isDisabled}
         placeholderStyle={{

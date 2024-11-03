@@ -55,9 +55,7 @@ const NotifCard: React.FC<NotifCardProps> = ({
   };
 
   const handleOpenFile = () => {
-    Linking.openURL(
-      'https://stirred-eagle-witty.ngrok-free.app/files/confirmation/125_check_in_2024-10-24.pdf',
-    );
+    Linking.openURL(notif.file);
   };
 
   return (

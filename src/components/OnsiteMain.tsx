@@ -45,6 +45,7 @@ const OnsiteMain: React.FC<OnsiteMainProps> = ({ route }) => {
       case 'attendance':
         return (
           <AttendancePage
+            getAttendance={getAttendance}
             NIK={NIK}
             attendanceData={attendanceData}
             status={attendanceStatus}
@@ -56,8 +57,9 @@ const OnsiteMain: React.FC<OnsiteMainProps> = ({ route }) => {
       case 'logbook':
         return (
           <LogbookPage
+            getAttendance={getAttendance}
             logbookData={attendanceData.activities}
-            attendanceID={attendanceID}
+            attendanceID={attendanceData.id}
           />
         );
       case 'permit':

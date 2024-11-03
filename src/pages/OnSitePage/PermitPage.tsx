@@ -1,5 +1,5 @@
 // PermitPage.tsx
-import { View, Text } from 'react-native';
+import { View, Text, Alert } from 'react-native';
 import React, { useState } from 'react';
 import DropdownCustom from '../../components/DropdownCustom';
 import ButtonCustom from '../../components/ButtonCustom';
@@ -81,6 +81,13 @@ const PermitPage: React.FC<PermitPageProps> = ({ NIK }) => {
     console.log('submit dibatalkan');
   };
 
+  const clearForm = () => {
+    setSelectedReason('');
+    setSelectedDate('');
+    setSelectedDays('');
+    setToggleCheckBox(false);
+  };
+
   const handleConfirmSubmit = async () => {
     const token = await getCookie('token');
 
@@ -105,9 +112,22 @@ const PermitPage: React.FC<PermitPageProps> = ({ NIK }) => {
           .setContentType('multipart/form-data')
           .setReqBody(formData)
           .post(
-            (data) => {},
+            (data) => {
+              Alert.alert('Pemberitahuan', 'Pengajuan IZIN berhasil dikirim', [
+                {
+                  text: 'Mengerti',
+                  onPress: () => {},
+                },
+              ]);
+              clearForm();
+            },
             (error) => {
-              console.log('Error:', error);
+              Alert.alert('Pemberitahuan', 'Pengajuan GAGAL dikirim', [
+                {
+                  text: 'Mengerti',
+                  onPress: () => {},
+                },
+              ]);
             },
           );
       }
