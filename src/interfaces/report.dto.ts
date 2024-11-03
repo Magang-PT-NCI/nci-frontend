@@ -7,4 +7,7 @@ export interface ReportResData {
   working_hours: string;
   nik: string;
   name: string;
+  checkInTime: string;
+  checkOutTime: string;
+  notes: string;
 }
