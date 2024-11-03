@@ -1,11 +1,24 @@
-import { View, Text } from 'react-native';
-import React from 'react';
+import { View, Text, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import DropdownCustom from './DropdownCustom';
+import LogbookDropdown from './LogbookDropdown';
+import ButtonCustom from './ButtonCustom';
+import DateTimePicker from 'react-native-modal-datetime-picker';
+import { getCookie } from '../utils/getCookie';
+import ApiRequest from '../utils/ApiRequest';
+import {
+  LogbookUpdateReqBody,
+  LogbookUpdateResData,
+} from '../interfaces/logbook.dto';
+import { ATTENDANCE_URL } from '../config/app.config';
 
 interface LogbookCardProps {
   timeStart: string;
   timeEnd: string;
   desc: string;
   status: string;
+  id: number;
+  getAttendance: () => void;
 }
 
 const LogbookCard: React.FC<LogbookCardProps> = ({
@@ -13,20 +26,87 @@ const LogbookCard: React.FC<LogbookCardProps> = ({
   timeEnd,
   desc,
   status,
+  id,
+  getAttendance,
 }) => {
+  const statusData = [
+    { label: 'done', value: 'done' },
+    { label: 'progress', value: 'progress' },
+  ];
+
+  const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
+  const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
+  const [endTime, setEndTime] = useState<string>(timeEnd);
+
+  const handleStatusChange = (value: string) => {
+    setSelectedStatus(value);
+  };
+
+  const updateEndTime = async (newTime: string) => {
+    const token = (await getCookie('token')) || '';
+    const response = await new ApiRequest<
+      LogbookUpdateReqBody,
+      LogbookUpdateResData
+    >()
+      .setToken(token)
+      .setURL(`${ATTENDANCE_URL}/logbook/${id}`)
+      .setReqBody({ end_time: newTime })
+      .patch(
+        () => getAttendance(),
+        () => console.log(`[LogbookDropdown] update endTime: ${endTime}`),
+      );
+  };
+
+  const showPicker = () => {
+    setIsDatePickerVisible(true);
+  };
+
+  const hidePicker = () => {
+    setIsDatePickerVisible(false);
+  };
+
+  const handleConfirm = (date: Date) => {
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    const formattedTime = `${hours}:${minutes}`;
+    console.log(date);
+    console.log(formattedTime);
+
+    setEndTime(formattedTime);
+
+    updateEndTime(formattedTime);
+
+    hidePicker();
+  };
+
   return (
     <View className="w-full p-5 pb-4 border border-accentGreen rounded-lg mb-4">
       <View className="flex flex-row justify-between">
-        <Text className=" bg-accentYellow rounded px-2 py-1 text-background font-bold">
-          {timeStart} - {timeEnd}
-        </Text>
-        <Text
-          className={`${
-            status === 'done' ? 'bg-green-600' : 'bg-blue-500'
-          } text-center rounded px-3 py-1 text-background font-bold `}
-        >
-          {status}
-        </Text>
+        <View className="w-[100] h-[30]">
+          <Text className=" bg-accentYellow rounded px-2 py-1 text-background font-bold text-sm text-center">
+            {timeStart}
+          </Text>
+        </View>
+        <TouchableOpacity className="w-[100] h-[30] " onPress={showPicker}>
+          <Text className=" bg-accentYellow rounded px-2 py-1 text-background font-bold text-sm text-center">
+            {endTime}
+          </Text>
+        </TouchableOpacity>
+        <DateTimePicker
+          isVisible={isDatePickerVisible}
+          mode="time"
+          onConfirm={handleConfirm}
+          onCancel={hidePicker}
+        />
+        <View>
+          <LogbookDropdown
+            getAttendance={getAttendance}
+            id={id}
+            status={status}
+            data={statusData}
+            onValueChange={handleStatusChange}
+          />
+        </View>
       </View>
       <Text className="text-textDefault text-sm mt-5 text-justify ">
         {desc}

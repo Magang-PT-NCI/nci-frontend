@@ -21,3 +21,18 @@ export interface LogbookReqBody {
   start_time: string;
   end_time: string;
 }
+
+export interface LogbookUpdateReqBody {
+  description?: string;
+  status?: string;
+  start_time?: string;
+  end_time?: string;
+}
+
+export interface LogbookUpdateResData {
+  id: number;
+  description: string;
+  status: string;
+  start_time: string;
+  end_time: string;
+}
