@@ -3,6 +3,7 @@ import React from 'react';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
 import { ReportResData } from '../../interfaces/report.dto';
+import { getStatus } from 'src/utils/commonUtils';
 
 interface TableRowProps {
   number: string;
@@ -29,18 +30,18 @@ const ReportTableRow: React.FC<TableRowProps> = ({
     name,
     date,
     status,
+    checkInTime: '',
+    checkOutTime: '',
+    notes: '',
   };
 
   const getStatusColor = () => {
-    switch (status) {
-      case 'presence':
-        status = 'Hadir';
+    switch (getStatus(status)) {
+      case 'Hadir':
         return 'bg-accentGreen';
-      case 'permit':
-        status = 'Izin';
+      case 'Izin':
         return 'bg-accentYellow';
-      case 'absent':
-        status = 'Absen';
+      case 'Absen':
         return 'bg-red-400';
       default:
         return 'bg-textDefault';
@@ -74,7 +75,9 @@ const ReportTableRow: React.FC<TableRowProps> = ({
         </Text>
       </View>
       <View className={`w-20 ${getStatusColor()} rounded-lg py-1 items-center`}>
-        <Text className=" text-background font-semibold text-xs">{status}</Text>
+        <Text className=" text-background font-semibold text-xs">
+          {getStatus(status)}
+        </Text>
       </View>
     </TouchableOpacity>
   );

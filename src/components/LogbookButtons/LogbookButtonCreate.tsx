@@ -34,7 +34,7 @@ const LogbookButtonCreate: React.FC<LogbookButtonCreateProps> = ({
   const [endTime, setEndTime] = useState<string>('Jam Selesai');
   const [selectedStatus, setSelectedStatus] = useState<string>('');
   const [activityDescription, setActivityDescription] = useState<string>('');
-
+  // console.log('[logbookButtonCreate] Create]', attendanceID);
   const showDatePicker = (button: 'start' | 'end') => {
     setSelectedTimeButton(button);
     setIsDatePickerVisible(true);

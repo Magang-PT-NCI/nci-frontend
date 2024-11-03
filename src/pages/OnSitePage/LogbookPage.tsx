@@ -8,15 +8,17 @@ import { Logbook, LogbookResData } from '../../interfaces/logbook.dto';
 interface LogbookPageProps {
   logbookData: Logbook[];
   attendanceID: number;
+  getAttendance: () => void;
 }
 
 const LogbookPage: React.FC<LogbookPageProps> = ({
   logbookData,
   attendanceID,
+  getAttendance,
 }) => {
   const [logbook, setLogbook] = useState<Logbook[]>([]);
   const [filteredData, setFilteredData] = useState<Logbook[]>([]);
-
+  console.log(attendanceID);
   const filterLogbookData = (filter: string) => {
     if (filter === 'all') {
       setFilteredData(logbook);
@@ -53,7 +55,9 @@ const LogbookPage: React.FC<LogbookPageProps> = ({
       <ScrollView style={{ showsVerticalScrollIndicator: false }}>
         {filteredData?.map((item, index) => (
           <LogbookCard
+            getAttendance={getAttendance}
             key={index}
+            id={item.id}
             timeStart={item.start_time}
             timeEnd={item.end_time}
             status={item.status}

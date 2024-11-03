@@ -65,3 +65,16 @@ export const getLocation = async () => {
     return { latitude, longitude };
   }
 };
+
+export const getStatus = (status: string) => {
+  switch (status) {
+    case 'presence':
+      return 'Hadir';
+    case 'permit':
+      return 'Izin';
+    case 'absent':
+      return 'Absen';
+    default:
+      return status;
+  }
+};

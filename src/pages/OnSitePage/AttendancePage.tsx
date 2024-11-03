@@ -34,6 +34,7 @@ type AttendancePageProps = {
   isCheckedIn: boolean;
   setIsCheckedIn: (isCheckedIn: boolean) => void;
   setAttendanceID: (id: number) => void;
+  getAttendance: () => void;
 };
 
 const AttendancePage: React.FC<AttendancePageProps> = ({
@@ -43,6 +44,7 @@ const AttendancePage: React.FC<AttendancePageProps> = ({
   isCheckedIn,
   setIsCheckedIn,
   setAttendanceID,
+  getAttendance,
 }) => {
   const [cameraVisible, setCameraVisible] = useState(false);
   const [employee, setEmployee] = useState({} as EmployeeResData);
@@ -108,6 +110,7 @@ const AttendancePage: React.FC<AttendancePageProps> = ({
         .post(
           () => {
             setIsCheckedIn(type === 'check_in');
+            getAttendance();
           },
           (error) => {
             console.log(JSON.stringify(error, null, 2));
@@ -231,12 +234,13 @@ const AttendancePage: React.FC<AttendancePageProps> = ({
           name={employee.name}
           area={employee.area}
           role={employee.role}
+          status={attendanceData?.late ? 'Terlambat' : attendanceData?.status}
         />
 
         <ButtonCustom
           icon={'hand-left-outline'}
           title={isCheckedIn ? 'Check Out' : 'Check In'}
-          isDisabled={!!attendanceData.checkOut}
+          disabled={!!attendanceData.checkOut}
           callbackEvt={handlerAttendance}
           mt={20}
         />
