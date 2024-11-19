@@ -57,6 +57,7 @@ const OnsiteMain: React.FC<OnsiteMainProps> = ({ route }) => {
       case 'logbook':
         return (
           <LogbookPage
+            role="onsite"
             getAttendance={getAttendance}
             logbookData={attendanceData.activities}
             attendanceID={attendanceData.id}

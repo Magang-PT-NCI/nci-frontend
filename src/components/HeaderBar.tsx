@@ -5,6 +5,7 @@ import NotifBellIcon from '../../assets/icons/notificationsIcon';
 import ButtonCustom from './ButtonCustom';
 import { removeCookie } from '../utils/removeCookie';
 import { useNavigation, StackActions } from '@react-navigation/native';
+import customConfirmDialogue from '../utils/customConfirmDialogue';
 
 interface HeaderBarProps {
   image_profile: string;
@@ -16,8 +17,15 @@ const HeaderBar: React.FC<HeaderBarProps> = ({ image_profile, role }) => {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
 
   const handleLogout = async () => {
-    await removeCookie('token');
-    navigation.dispatch(StackActions.replace('LoginPage'));
+    customConfirmDialogue(
+      'Konfirmasi',
+      'Keluar aplikasi?',
+      () => {},
+      () => {
+        navigation.dispatch(StackActions.replace('LoginPage'));
+      },
+    );
+    removeCookie('token');
   };
 
   return (

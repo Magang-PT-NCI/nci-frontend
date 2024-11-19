@@ -9,6 +9,8 @@ export interface NotificationResData {
 
 export interface ApprovalReqBody {
   approved: boolean;
+  denied_description?: string;
+  approval_nik: string;
 }
 
 export interface ApprovalResData {

@@ -8,17 +8,18 @@ import { Logbook, LogbookResData } from '../../interfaces/logbook.dto';
 interface LogbookPageProps {
   logbookData: Logbook[];
   attendanceID: number;
-  getAttendance: () => void;
+  getAttendance?: () => void;
+  role?: 'onsite' | 'coord';
 }
 
 const LogbookPage: React.FC<LogbookPageProps> = ({
   logbookData,
   attendanceID,
   getAttendance,
+  role,
 }) => {
   const [logbook, setLogbook] = useState<Logbook[]>([]);
   const [filteredData, setFilteredData] = useState<Logbook[]>([]);
-  console.log(attendanceID);
   const filterLogbookData = (filter: string) => {
     if (filter === 'all') {
       setFilteredData(logbook);
@@ -41,20 +42,27 @@ const LogbookPage: React.FC<LogbookPageProps> = ({
     setLogbook(logbookData || []);
   }, [logbookData]);
 
+  console.log(JSON.stringify(filteredData, null, 2));
+
   return (
     <View className="w-full h-full flex bg-background p-4">
       <View className="w-full pb-4">
         <LogbookButtonFilter onFilter={filterLogbookData} />
-        <LogbookButtonCreate
-          attendanceID={attendanceID}
-          onSubmit={handleSubmit}
-        />
+        {role === 'onsite' ? (
+          <LogbookButtonCreate
+            attendanceID={attendanceID}
+            onSubmit={handleSubmit}
+          />
+        ) : (
+          ''
+        )}
       </View>
 
       {/*@ts-ignore*/}
       <ScrollView style={{ showsVerticalScrollIndicator: false }}>
         {filteredData?.map((item, index) => (
           <LogbookCard
+            role={role}
             getAttendance={getAttendance}
             key={index}
             id={item.id}
