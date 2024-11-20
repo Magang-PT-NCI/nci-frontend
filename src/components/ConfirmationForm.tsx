@@ -108,7 +108,6 @@ const ConfirmationForm: React.FC<ConfirmationFormProps> = ({
                 {
                   text: 'Mengerti',
                   onPress: () => {
-                    console.log(data);
                     clearForm();
                   },
                 },

@@ -14,6 +14,7 @@ import { AttendanceResData } from '../../interfaces/attendance.dto';
 import AttendanceMap from '../../components/AttendanceMap';
 import ImageAttendance from '../../components/ImageAttendance';
 import { Ionicons } from '@expo/vector-icons';
+import LogbookPage from '../OnSitePage/LogbookPage';
 
 type OnsiteMainProps = NativeStackScreenProps<
   StackParamList,
@@ -58,8 +59,6 @@ const OnSiteDetailPage: React.FC<OnsiteMainProps> = ({ route }) => {
         .get();
 
       const data = res.getData();
-
-      console.log(data);
 
       if (data) {
         setAttendanceData(data);
@@ -116,6 +115,13 @@ const OnSiteDetailPage: React.FC<OnsiteMainProps> = ({ route }) => {
             status={'Check Out'}
             latitude={attendanceData.checkOut?.location?.latitude}
             longitude={attendanceData.checkOut?.location?.longitude}
+          />
+
+          {/*logbook*/}
+          <LogbookPage
+            role="coord"
+            logbookData={attendanceData.activities}
+            attendanceID={attendanceData.id}
           />
         </View>
       </SafeAreaView>

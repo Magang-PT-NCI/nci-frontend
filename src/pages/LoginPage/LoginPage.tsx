@@ -4,9 +4,8 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
   ScrollView,
+  Image,
 } from 'react-native';
-// @ts-ignore
-import LoginImage from '../../../assets/image/dev_app_illustration';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import FormLogin from './FormLogin';
 import { StackActions, useNavigation } from '@react-navigation/native';
@@ -36,6 +35,7 @@ const LoginPage = () => {
   const handleFormSubmit = async (data: LoginReqBody) => {
     const loginSuccess = (data: LoginResdata) => {
       setCookie('token', data.token);
+      setCookie('NIK', data.nik);
 
       const profile_photo = data.profile_photo;
       const NIK = data.nik;
@@ -67,7 +67,10 @@ const LoginPage = () => {
       >
         <View className="w-full h-full bg-accentGreen flex justify-between items-center">
           <SafeAreaView className="py-20">
-            <LoginImage width={240} height={240} />
+            <Image
+              source={require('../../../assets/logo.png')}
+              style={{ width: 180, height: 180 }}
+            />
           </SafeAreaView>
 
           <FormLogin

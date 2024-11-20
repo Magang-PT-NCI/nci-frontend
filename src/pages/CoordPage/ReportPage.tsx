@@ -40,7 +40,6 @@ const ReportPage = () => {
       .get();
 
     const data = response.getData();
-    console.log(data);
 
     if (data) {
       setReportData(response.getData());

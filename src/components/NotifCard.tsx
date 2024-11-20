@@ -1,8 +1,8 @@
 import { View, Text, TouchableOpacity } from 'react-native';
 import * as Linking from 'expo-linking';
-import React from 'react';
+import React, { useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
+//import { useNavigation } from '@react-navigation/native';
 import {
   ApprovalReqBody,
   ApprovalResData,
@@ -13,6 +13,7 @@ import { getCookie } from '../utils/getCookie';
 import ApiRequest from '../utils/ApiRequest';
 import { ATTENDANCE_URL } from '../config/app.config';
 import customConfirmDialogue from '../utils/customConfirmDialogue';
+import DeniedReasonForm from './DeniedReasonForm';
 
 interface NotifCardProps {
   notif: NotificationResData;
@@ -25,14 +26,16 @@ const NotifCard: React.FC<NotifCardProps> = ({
   role,
   removeNotification,
 }) => {
-  const navigation = useNavigation();
+  //const navigation = useNavigation();
+  const [formModalOpen, setFormModalOpen] = useState(false);
 
-  const patchNotifStatus = async (approved: boolean) => {
+  const patchNotifStatus = async (approved: boolean, desc?: string) => {
     const token = (await getCookie('token')) || '';
-    const response = await new ApiRequest<ApprovalReqBody, ApprovalResData>()
+    const NIK = await getCookie('NIK');
+    await new ApiRequest<ApprovalReqBody, ApprovalResData>()
       .setToken(token)
       .setURL(ATTENDANCE_URL + notif.action_endpoint)
-      .setReqBody({ approved })
+      .setReqBody({ approved, denied_description: desc, approval_nik: NIK })
       .patch(() => removeNotification());
   };
 
@@ -50,7 +53,9 @@ const NotifCard: React.FC<NotifCardProps> = ({
       'Konfirmasi Persetujuan',
       'Apakah Anda yakin akan MENOLAK pengajuan?',
       () => {},
-      () => patchNotifStatus(false),
+      () => {
+        setFormModalOpen(true);
+      },
     );
   };
 
@@ -118,6 +123,12 @@ const NotifCard: React.FC<NotifCardProps> = ({
           ''
         )}
       </View>
+
+      <DeniedReasonForm
+        setIsModalOpen={setFormModalOpen}
+        isModalOpen={formModalOpen}
+        handlePatch={patchNotifStatus}
+      />
     </View>
   );
 };

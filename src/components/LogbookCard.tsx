@@ -18,6 +18,7 @@ interface LogbookCardProps {
   desc: string;
   status: string;
   id: number;
+  role?: 'onsite' | 'coord';
   getAttendance: () => void;
 }
 
@@ -27,6 +28,7 @@ const LogbookCard: React.FC<LogbookCardProps> = ({
   desc,
   status,
   id,
+  role = 'onsite',
   getAttendance,
 }) => {
   const statusData = [
@@ -44,10 +46,7 @@ const LogbookCard: React.FC<LogbookCardProps> = ({
 
   const updateEndTime = async (newTime: string) => {
     const token = (await getCookie('token')) || '';
-    const response = await new ApiRequest<
-      LogbookUpdateReqBody,
-      LogbookUpdateResData
-    >()
+    await new ApiRequest<LogbookUpdateReqBody, LogbookUpdateResData>()
       .setToken(token)
       .setURL(`${ATTENDANCE_URL}/logbook/${id}`)
       .setReqBody({ end_time: newTime })
@@ -57,11 +56,11 @@ const LogbookCard: React.FC<LogbookCardProps> = ({
       );
   };
 
-  const showPicker = () => {
+  const showTimePicker = () => {
     setIsDatePickerVisible(true);
   };
 
-  const hidePicker = () => {
+  const hideTimePicker = () => {
     setIsDatePickerVisible(false);
   };
 
@@ -69,14 +68,10 @@ const LogbookCard: React.FC<LogbookCardProps> = ({
     const hours = date.getHours().toString().padStart(2, '0');
     const minutes = date.getMinutes().toString().padStart(2, '0');
     const formattedTime = `${hours}:${minutes}`;
-    console.log(date);
-    console.log(formattedTime);
 
     setEndTime(formattedTime);
-
     updateEndTime(formattedTime);
-
-    hidePicker();
+    hideTimePicker();
   };
 
   return (
@@ -87,16 +82,28 @@ const LogbookCard: React.FC<LogbookCardProps> = ({
             {timeStart}
           </Text>
         </View>
-        <TouchableOpacity className="w-[100] h-[30] " onPress={showPicker}>
-          <Text className=" bg-accentYellow rounded px-2 py-1 text-background font-bold text-sm text-center">
-            {endTime}
-          </Text>
-        </TouchableOpacity>
+        {role === 'onsite' ? (
+          <TouchableOpacity
+            className="w-[100] h-[30] "
+            onPress={showTimePicker}
+          >
+            <Text className=" bg-accentYellow rounded px-2 py-1 text-background font-bold text-sm text-center">
+              {endTime}
+            </Text>
+          </TouchableOpacity>
+        ) : (
+          <View className="w-[100] h-[30]">
+            <Text className=" bg-accentYellow rounded px-2 py-1 text-background font-bold text-sm text-center">
+              {endTime}
+            </Text>
+          </View>
+        )}
+
         <DateTimePicker
           isVisible={isDatePickerVisible}
           mode="time"
           onConfirm={handleConfirm}
-          onCancel={hidePicker}
+          onCancel={hideTimePicker}
         />
         <View>
           <LogbookDropdown
@@ -105,6 +112,7 @@ const LogbookCard: React.FC<LogbookCardProps> = ({
             status={status}
             data={statusData}
             onValueChange={handleStatusChange}
+            isDisabled={role === 'coord'}
           />
         </View>
       </View>

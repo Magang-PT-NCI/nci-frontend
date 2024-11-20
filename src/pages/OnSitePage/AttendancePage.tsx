@@ -126,7 +126,6 @@ const AttendancePage: React.FC<AttendancePageProps> = ({
 
       const postResData = response.getData();
       setAttendanceID(postResData.attendance_id);
-      console.log(postResData.attendance_id);
 
       setCheckResData((prevData) => {
         if (postResData.type === 'check_in') {
@@ -259,8 +258,7 @@ const AttendancePage: React.FC<AttendancePageProps> = ({
           {/*confirm-absent-button*/}
           <TouchableOpacity
             onPress={handlePresenceConfirmation}
-            disabled={!checkResData.checkIn}
-            className={`w-1/2 ${checkResData.checkIn ? 'bg-accentGreen' : 'bg-[#387D4A]'} rounded-lg p-2 items-center`}
+            className={`w-1/2 bg-accentGreen rounded-lg p-2 items-center`}
           >
             <Ionicons name="checkmark-circle-outline" size={24} color="black" />
             <Text className="text-background text-xs text-center">
