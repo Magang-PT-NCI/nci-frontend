@@ -60,8 +60,6 @@ const OnSiteDetailPage: React.FC<OnsiteMainProps> = ({ route }) => {
 
       const data = res.getData();
 
-      console.log(data);
-
       if (data) {
         setAttendanceData(data);
       }

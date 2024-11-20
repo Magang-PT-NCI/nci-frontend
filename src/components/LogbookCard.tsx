@@ -29,7 +29,6 @@ const LogbookCard: React.FC<LogbookCardProps> = ({
   status,
   id,
   role = 'onsite',
-
   getAttendance,
 }) => {
   const statusData = [

@@ -126,7 +126,6 @@ const AttendancePage: React.FC<AttendancePageProps> = ({
 
       const postResData = response.getData();
       setAttendanceID(postResData.attendance_id);
-      console.log(postResData.attendance_id);
 
       setCheckResData((prevData) => {
         if (postResData.type === 'check_in') {

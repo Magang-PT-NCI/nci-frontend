@@ -20,11 +20,20 @@ const LogbookPage: React.FC<LogbookPageProps> = ({
 }) => {
   const [logbook, setLogbook] = useState<Logbook[]>([]);
   const [filteredData, setFilteredData] = useState<Logbook[]>([]);
+  const [filter, setFilter] = useState('all');
   const filterLogbookData = (filter: string) => {
     if (filter === 'all') {
       setFilteredData(logbook);
+      console.log('ALL');
     } else {
-      setFilteredData(logbook.filter((item) => item.status === filter));
+      console.log(filter);
+      setFilteredData(
+        logbook.filter((item) => {
+          console.log(item.status);
+          console.log(filter);
+          return item.status === filter;
+        }),
+      );
     }
   };
 
@@ -35,19 +44,24 @@ const LogbookPage: React.FC<LogbookPageProps> = ({
   };
 
   useEffect(() => {
-    filterLogbookData('all');
+    filterLogbookData(filter);
   }, [logbook]);
 
   useEffect(() => {
     setLogbook(logbookData || []);
   }, [logbookData]);
 
-  console.log(JSON.stringify(filteredData, null, 2));
+  // console.log(JSON.stringify(filteredData, null, 2));
 
   return (
     <View className="w-full h-full flex bg-background p-4">
       <View className="w-full pb-4">
-        <LogbookButtonFilter onFilter={filterLogbookData} />
+        <LogbookButtonFilter
+          onFilter={(filter) => {
+            setFilter(filter);
+            filterLogbookData(filter);
+          }}
+        />
         {role === 'onsite' ? (
           <LogbookButtonCreate
             attendanceID={attendanceID}

@@ -42,7 +42,7 @@ const LogbookDropdown: React.FC<LogbookDropdownProps> = ({
 
   useEffect(() => {
     setLogbookValue(status);
-  }, []);
+  }, [status]);
 
   return (
     <View className="w-full">
